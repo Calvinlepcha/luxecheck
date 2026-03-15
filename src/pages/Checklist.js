@@ -2,6 +2,9 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getBag } from '../data/bags';
 import BagImage from '../components/BagImage';
+import ImageModal from '../components/ImageModal';
+import ChecklistBackground from '../components/ChecklistBackground';
+import BackgroundImage from '../components/BackgroundImage';
 
 const categoryIcons = {
   stitching: '\u2704',
@@ -24,6 +27,7 @@ function Checklist() {
   const [answers, setAnswers] = useState({});
   const [animDir, setAnimDir] = useState(null); // 'left' | 'right' | null
   const [animating, setAnimating] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
 
   const total = bag ? bag.checkpoints.length : 0;
   const checkpoint = bag ? bag.checkpoints[currentIndex] : null;
@@ -121,9 +125,17 @@ function Checklist() {
   };
 
   const currentAnswer = answers[checkpoint.id];
+  const refImage = checkpoint.image || bag.image;
+
+  const checklistProgress = total > 0 ? (currentIndex + 1) / total : 0;
 
   return (
     <div style={s.page}>
+      <BackgroundImage url="https://images.unsplash.com/photo-1564842505181-8862a3b9b173?w=1920&q=80" opacity={0.12} />
+      <ChecklistBackground progress={checklistProgress} />
+      {modalImage && (
+        <ImageModal src={modalImage.src} alt={modalImage.alt} onClose={() => setModalImage(null)} />
+      )}
       {/* Header */}
       <div style={s.header}>
         <button style={s.backBtn} onClick={() => currentIndex === 0 ? navigate(`/scan`) : handleBack()}>
@@ -136,9 +148,20 @@ function Checklist() {
         </div>
       </div>
 
+      {/* AI info card — show only on first checkpoint */}
+      {currentIndex === 0 && (
+        <div className="glass-card" style={s.aiInfoCard}>
+          <span style={s.aiInfoTitle}>LuxeCheck AI</span>
+          <p style={s.aiInfoText}>
+            You're using an intelligent authentication guide that walks you through the same checkpoints professional authenticators use. Your visual inspection combined with our AI knowledge base gives you a detailed authenticity assessment.
+          </p>
+        </div>
+      )}
+
       {/* Progress bar */}
-      <div style={s.progressTrack}>
+      <div className="glass-progress-track" style={{ ...s.progressTrack, overflow: 'visible' }}>
         <div
+          className="progress-sparkle"
           style={{
             ...s.progressFill,
             width: `${((currentIndex + 1) / total) * 100}%`,
@@ -154,10 +177,11 @@ function Checklist() {
       {/* Checkpoint card */}
       <div style={s.cardWrapper}>
         <div
+          className="glass-card"
           style={{
             ...s.card,
             ...getSlideStyle(),
-            transition: 'transform 0.25s ease, opacity 0.2s ease',
+            transition: 'transform 0.25s ease, opacity 0.4s ease',
           }}
         >
           {/* Category + Name */}
@@ -172,19 +196,42 @@ function Checklist() {
           {/* What to look for */}
           <p style={s.description}>{checkpoint.description}</p>
 
-          {/* Reference photo */}
-          <BagImage
-            src={bag.image}
-            alt={`${bag.brand} ${bag.model}`}
-            fallbackText={`${bag.brand} ${bag.model}`}
-            style={s.referencePhoto}
-          />
+          {/* Reference photo — large, tappable */}
+          <div
+            style={s.refPhotoWrap}
+            onClick={() => setModalImage({ src: refImage, alt: `${bag.brand} ${bag.model} — ${checkpoint.name}` })}
+            role="button"
+            tabIndex={0}
+          >
+            <BagImage
+              src={refImage}
+              alt={`${bag.brand} ${bag.model} — ${checkpoint.name}`}
+              fallbackText={`${bag.brand} ${bag.model}`}
+              style={s.referencePhoto}
+              className="checklist-ref-img"
+            />
+            <span style={s.tapHint}>Tap to enlarge</span>
+          </div>
 
-          {/* Auth vs Fake sections */}
-          <div style={s.comparisonGrid}>
+          {/* Auth vs Fake comparison with images */}
+          <div style={s.comparisonGrid} data-comparison-grid="">
             <div style={s.authSection}>
               <div style={s.sectionHeader}>
                 <span style={s.passIcon}>{'\u2713'}</span> Authentic
+              </div>
+              <div
+                style={s.compRefWrap}
+                onClick={() => setModalImage({ src: refImage, alt: `Authentic — ${checkpoint.name}` })}
+                role="button"
+                tabIndex={0}
+              >
+                <BagImage
+                  src={refImage}
+                  alt={`Authentic — ${checkpoint.name}`}
+                  fallbackText="Authentic"
+                  style={s.compRefImage}
+                  className="comp-ref-img"
+                />
               </div>
               <p style={s.sectionText}>{checkpoint.passDescription}</p>
             </div>
@@ -192,12 +239,26 @@ function Checklist() {
               <div style={s.sectionHeader}>
                 <span style={s.failIcon}>{'\u2717'}</span> Fake
               </div>
+              <div
+                style={s.compRefWrap}
+                onClick={() => setModalImage({ src: bag.image, alt: `Fake reference — ${checkpoint.name}` })}
+                role="button"
+                tabIndex={0}
+              >
+                <BagImage
+                  src={bag.image}
+                  alt={`Fake reference — ${checkpoint.name}`}
+                  fallbackText="Fake"
+                  style={s.compRefImage}
+                  className="comp-ref-img"
+                />
+              </div>
               <p style={s.sectionText}>{checkpoint.failDescription}</p>
             </div>
           </div>
 
           {/* Answer buttons */}
-          <div style={s.buttonGroup}>
+          <div style={s.buttonGroup} data-answer-buttons="">
             <button
               style={{
                 ...s.answerBtn,
@@ -205,10 +266,12 @@ function Checklist() {
                 ...(currentAnswer === ANSWER.pass ? s.passBtnActive : {}),
               }}
               onClick={() => handleAnswer(ANSWER.pass)}
+              className="btn-luxe glass-btn-pass"
             >
               {'\u2713'} Matches Real
             </button>
             <button
+              className="btn-luxe glass-btn-fail"
               style={{
                 ...s.answerBtn,
                 ...s.failBtn,
@@ -219,6 +282,7 @@ function Checklist() {
               {'\u2717'} Matches Fake
             </button>
             <button
+              className="btn-luxe glass-btn-unsure"
               style={{
                 ...s.answerBtn,
                 ...s.unsureBtn,
@@ -243,6 +307,8 @@ const s = {
     maxWidth: '600px',
     margin: '0 auto',
     overflow: 'hidden',
+    position: 'relative',
+    zIndex: 1,
   },
 
   header: {
@@ -274,11 +340,34 @@ const s = {
     letterSpacing: '0.05em',
   },
 
+  aiInfoCard: {
+    padding: '16px 20px',
+    marginBottom: '16px',
+    borderRadius: '12px',
+    border: '1px solid rgba(184, 148, 95, 0.12)',
+  },
+  aiInfoTitle: {
+    fontFamily: 'var(--font-body)',
+    fontSize: '11px',
+    fontWeight: 600,
+    letterSpacing: '0.12em',
+    textTransform: 'uppercase',
+    color: '#D4B978',
+    display: 'block',
+    marginBottom: '6px',
+  },
+  aiInfoText: {
+    fontFamily: 'var(--font-body)',
+    fontSize: '0.8rem',
+    fontWeight: 300,
+    lineHeight: 1.7,
+    color: 'var(--color-cream-muted)',
+    margin: 0,
+  },
+
   progressTrack: {
     width: '100%',
-    height: '3px',
-    backgroundColor: 'var(--color-surface)',
-    borderRadius: '2px',
+    height: '4px',
     marginBottom: '20px',
     overflow: 'hidden',
   },
@@ -286,8 +375,10 @@ const s = {
   progressFill: {
     height: '100%',
     backgroundColor: 'var(--color-gold)',
-    borderRadius: '2px',
+    borderRadius: '6px',
     transition: 'width 0.4s ease',
+    boxShadow: 'inset 0 0 4px rgba(184, 148, 95, 0.3), 0 0 8px rgba(184, 148, 95, 0.15)',
+    opacity: 0.9,
   },
 
   subtitle: {
@@ -313,8 +404,6 @@ const s = {
   },
 
   card: {
-    background: 'var(--color-surface)',
-    border: '1px solid var(--color-border)',
     padding: '28px 24px 32px',
   },
 
@@ -349,24 +438,49 @@ const s = {
     color: 'var(--color-cream)',
     marginBottom: '16px',
     lineHeight: 1.2,
+    letterSpacing: '0.15em',
+    textTransform: 'uppercase',
   },
 
   description: {
     fontFamily: 'var(--font-body)',
     fontSize: '0.9rem',
+    fontWeight: 300,
     lineHeight: 1.65,
     color: 'var(--color-cream-muted)',
     marginBottom: '20px',
   },
 
+  refPhotoWrap: {
+    position: 'relative',
+    cursor: 'pointer',
+    marginBottom: '24px',
+    borderRadius: '12px',
+    overflow: 'hidden',
+  },
+
   referencePhoto: {
     width: '100%',
-    height: '200px',
+    height: '250px',
     objectFit: 'cover',
-    borderRadius: '4px',
-    marginBottom: '24px',
+    display: 'block',
     background: 'var(--color-surface)',
-    border: '1px solid var(--color-border)',
+    border: '1px solid rgba(184, 148, 95, 0.1)',
+    borderRadius: '12px',
+  },
+
+  tapHint: {
+    position: 'absolute',
+    bottom: '10px',
+    right: '10px',
+    fontFamily: 'var(--font-body)',
+    fontSize: '0.65rem',
+    color: 'rgba(255,255,255,0.7)',
+    background: 'rgba(0,0,0,0.55)',
+    padding: '4px 10px',
+    borderRadius: '3px',
+    letterSpacing: '0.04em',
+    pointerEvents: 'none',
   },
 
   comparisonGrid: {
@@ -378,14 +492,16 @@ const s = {
 
   authSection: {
     padding: '16px',
-    background: 'rgba(72, 187, 120, 0.06)',
-    border: '1px solid rgba(72, 187, 120, 0.15)',
+    background: 'rgba(34, 197, 94, 0.04)',
+    border: '1px solid rgba(34, 197, 94, 0.12)',
+    borderRadius: '12px',
   },
 
   fakeSection: {
     padding: '16px',
-    background: 'rgba(245, 101, 101, 0.06)',
-    border: '1px solid rgba(245, 101, 101, 0.15)',
+    background: 'rgba(239, 68, 68, 0.04)',
+    border: '1px solid rgba(239, 68, 68, 0.12)',
+    borderRadius: '12px',
   },
 
   sectionHeader: {
@@ -394,23 +510,41 @@ const s = {
     fontWeight: 700,
     letterSpacing: '0.1em',
     textTransform: 'uppercase',
-    marginBottom: '8px',
+    marginBottom: '10px',
     color: 'var(--color-cream)',
   },
 
   passIcon: {
-    color: '#48BB78',
+    color: '#5B8C6A',
     marginRight: '4px',
   },
 
   failIcon: {
-    color: '#F56565',
+    color: '#A65D5D',
     marginRight: '4px',
+  },
+
+  compRefWrap: {
+    cursor: 'pointer',
+    marginBottom: '10px',
+    borderRadius: '8px',
+    overflow: 'hidden',
+  },
+
+  compRefImage: {
+    width: '100%',
+    height: '120px',
+    objectFit: 'cover',
+    display: 'block',
+    background: 'var(--color-surface)',
+    border: '1px solid rgba(184, 148, 95, 0.08)',
+    borderRadius: '8px',
   },
 
   sectionText: {
     fontFamily: 'var(--font-body)',
     fontSize: '0.8rem',
+    fontWeight: 300,
     lineHeight: 1.55,
     color: 'var(--color-cream-muted)',
   },
@@ -426,44 +560,41 @@ const s = {
     fontSize: '0.9rem',
     fontWeight: 600,
     padding: '16px 12px',
-    border: '2px solid',
+    border: '2px solid transparent',
+    borderRadius: 'var(--glass-radius)',
     cursor: 'pointer',
-    transition: 'all 0.2s ease',
+    transition: 'all 0.4s ease',
     letterSpacing: '0.02em',
     WebkitTapHighlightColor: 'transparent',
   },
 
   passBtn: {
-    background: 'rgba(72, 187, 120, 0.08)',
-    borderColor: 'rgba(72, 187, 120, 0.3)',
-    color: '#48BB78',
+    color: '#5B8C6A',
   },
 
   passBtnActive: {
-    background: 'rgba(72, 187, 120, 0.2)',
-    borderColor: '#48BB78',
+    background: 'rgba(34, 197, 94, 0.25)',
+    borderColor: '#5B8C6A',
+    boxShadow: '0 0 16px rgba(34, 197, 94, 0.15)',
   },
 
   failBtn: {
-    background: 'rgba(245, 101, 101, 0.08)',
-    borderColor: 'rgba(245, 101, 101, 0.3)',
-    color: '#F56565',
+    color: '#A65D5D',
   },
 
   failBtnActive: {
-    background: 'rgba(245, 101, 101, 0.2)',
-    borderColor: '#F56565',
+    background: 'rgba(239, 68, 68, 0.25)',
+    borderColor: '#A65D5D',
+    boxShadow: '0 0 16px rgba(239, 68, 68, 0.15)',
   },
 
   unsureBtn: {
-    background: 'rgba(160, 160, 160, 0.08)',
-    borderColor: 'rgba(160, 160, 160, 0.3)',
     color: '#A0A0A0',
     gridColumn: '1 / -1',
   },
 
   unsureBtnActive: {
-    background: 'rgba(160, 160, 160, 0.2)',
+    background: 'rgba(156, 163, 175, 0.2)',
     borderColor: '#A0A0A0',
   },
 };

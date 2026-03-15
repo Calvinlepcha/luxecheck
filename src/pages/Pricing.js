@@ -52,7 +52,7 @@ function Pricing() {
 
   return (
     <div style={s.page}>
-      <BackgroundImage url="https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?w=1920" opacity={0.1} />
+      <BackgroundImage url="https://images.unsplash.com/photo-1706164965907-f0ca4b16f7e4?w=1920&q=80" opacity={0.20} />
       <button style={s.backBtn} onClick={() => navigate(-1)}>
         &larr; Back
       </button>
@@ -66,29 +66,29 @@ function Pricing() {
       </div>
 
       {/* Pricing cards */}
-      <div style={s.cardGrid}>
+      <div style={s.cardGrid} data-pricing-grid="">
         {/* Single Report */}
-        <div style={s.card}>
+        <div className="glass-card" style={s.card}>
           <div style={s.cardInner}>
             <span style={s.tierLabel}>Single Report</span>
             <div style={s.priceRow}>
               <span style={s.price}>$6.99</span>
               <span style={s.priceSuffix}>one-time</span>
             </div>
-            <p style={s.goodFor}>Good for: Checking one bag before you buy</p>
+            <p style={s.goodFor}>Good for: Verifying a luxury item before you buy</p>
             <ul style={s.featureList}>
               <li style={s.featureItem}><span style={s.check}>{'\u2713'}</span> Full details on all checkpoints</li>
               <li style={s.featureItem}><span style={s.check}>{'\u2713'}</span> Downloadable PDF report</li>
               <li style={s.featureItem}><span style={s.check}>{'\u2713'}</span> Reference photo comparisons</li>
             </ul>
-            <button style={s.buyBtn} onClick={handleBuy}>
+            <button className="btn-luxe glass-btn-secondary" style={s.buyBtn} onClick={handleBuy}>
               Buy Report
             </button>
           </div>
         </div>
 
         {/* Unlimited */}
-        <div style={{ ...s.card, ...s.featuredCard }}>
+        <div className="glass-card" style={{ ...s.card, ...s.featuredCard }}>
           <div style={s.popularBadge}>Most Popular</div>
           <div style={s.cardInner}>
             <span style={s.tierLabel}>Unlimited</span>
@@ -99,11 +99,11 @@ function Pricing() {
             <p style={s.goodFor}>Good for: Resellers and collectors</p>
             <ul style={s.featureList}>
               <li style={s.featureItem}><span style={s.check}>{'\u2713'}</span> Everything in Single Report</li>
-              <li style={s.featureItem}><span style={s.check}>{'\u2713'}</span> Unlimited bag checks</li>
+              <li style={s.featureItem}><span style={s.check}>{'\u2713'}</span> Unlimited authenticity checks</li>
               <li style={s.featureItem}><span style={s.check}>{'\u2713'}</span> Collection portfolio tracker</li>
               <li style={s.featureItem}><span style={s.check}>{'\u2713'}</span> New brands added monthly</li>
             </ul>
-            <button style={s.subscribeBtn} onClick={handleSubscribe}>
+            <button className="btn-luxe glass-btn-primary" style={s.subscribeBtn} onClick={handleSubscribe}>
               Subscribe
             </button>
           </div>
@@ -182,12 +182,17 @@ const s = {
     color: 'var(--color-cream)',
     marginBottom: '12px',
     lineHeight: 1.15,
+    letterSpacing: '0.15em',
+    textTransform: 'uppercase',
+    textShadow: '0 0 40px rgba(184, 148, 95, 0.05)',
   },
 
   subtext: {
     fontFamily: 'var(--font-body)',
     fontSize: '1rem',
+    fontWeight: 300,
     color: 'var(--color-cream-muted)',
+    lineHeight: 1.7,
   },
 
   // Card grid
@@ -200,15 +205,16 @@ const s = {
   },
 
   card: {
-    background: 'var(--color-surface)',
-    border: '1px solid var(--color-border)',
     position: 'relative',
     overflow: 'hidden',
+    borderRadius: '12px',
   },
 
   featuredCard: {
-    border: '2px solid var(--color-gold)',
+    border: '2px solid rgba(184, 148, 95, 0.3)',
     transform: 'scale(1.02)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 24px rgba(184, 148, 95, 0.08)',
+    borderRadius: '12px',
   },
 
   popularBadge: {
@@ -225,6 +231,7 @@ const s = {
 
   cardInner: {
     padding: '32px 28px 28px',
+    lineHeight: 1.7,
   },
 
   tierLabel: {
@@ -260,10 +267,12 @@ const s = {
   goodFor: {
     fontFamily: 'var(--font-body)',
     fontSize: '0.8rem',
+    fontWeight: 300,
     color: 'var(--color-gold)',
     fontStyle: 'italic',
     marginBottom: '24px',
     opacity: 0.8,
+    lineHeight: 1.7,
   },
 
   featureList: {
@@ -275,11 +284,13 @@ const s = {
   featureItem: {
     fontFamily: 'var(--font-body)',
     fontSize: '0.875rem',
+    fontWeight: 300,
     color: 'var(--color-cream-muted)',
     padding: '6px 0',
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
+    lineHeight: 1.7,
   },
 
   check: {
@@ -295,12 +306,9 @@ const s = {
     letterSpacing: '0.08em',
     textTransform: 'uppercase',
     color: 'var(--color-gold)',
-    backgroundColor: 'transparent',
-    border: '2px solid var(--color-gold)',
     padding: '14px 0',
     width: '100%',
     cursor: 'pointer',
-    transition: 'all 0.25s ease',
   },
 
   subscribeBtn: {
@@ -309,28 +317,27 @@ const s = {
     fontWeight: 700,
     letterSpacing: '0.08em',
     textTransform: 'uppercase',
-    color: 'var(--color-bg)',
-    backgroundColor: 'var(--color-gold)',
-    border: '2px solid var(--color-gold)',
+    color: 'var(--color-cream)',
     padding: '14px 0',
     width: '100%',
     cursor: 'pointer',
-    transition: 'all 0.25s ease',
   },
 
   // Guarantee
   guarantee: {
     fontFamily: 'var(--font-body)',
     fontSize: '0.8rem',
+    fontWeight: 300,
     color: 'var(--color-cream-muted)',
     textAlign: 'center',
     marginBottom: '60px',
     opacity: 0.7,
+    lineHeight: 1.7,
   },
 
   // FAQ
   faqSection: {
-    borderTop: '1px solid var(--color-border)',
+    borderTop: '1px solid rgba(255, 255, 255, 0.04)',
     paddingTop: '40px',
   },
 
@@ -344,7 +351,7 @@ const s = {
   },
 
   faqItem: {
-    borderBottom: '1px solid var(--color-border)',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
   },
 
   faqQuestion: {
@@ -376,7 +383,8 @@ const s = {
   faqAnswer: {
     fontFamily: 'var(--font-body)',
     fontSize: '0.85rem',
-    lineHeight: 1.65,
+    fontWeight: 300,
+    lineHeight: 1.7,
     color: 'var(--color-cream-muted)',
     paddingBottom: '18px',
     paddingRight: '36px',

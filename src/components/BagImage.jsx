@@ -4,12 +4,13 @@ import React, { useState } from 'react';
  * Bag image with fallback.
  * Shows the bag name in gold Playfair Display on dark background if the image fails to load.
  */
-function BagImage({ src, alt, style, fallbackText }) {
+function BagImage({ src, alt, style, fallbackText, className }) {
   const [failed, setFailed] = useState(false);
 
   if (failed || !src) {
     return (
       <div
+        className={className}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -44,6 +45,7 @@ function BagImage({ src, alt, style, fallbackText }) {
       loading="lazy"
       onError={() => setFailed(true)}
       style={style}
+      className={className}
     />
   );
 }

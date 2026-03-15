@@ -24,6 +24,7 @@ const bags = [
     checkpoints: [
       {
         id: 'lv-nf-monogram-alignment',
+        image: 'https://images.unsplash.com/photo-1589462173946-481ba48c2e82?w=400&q=80',
         name: 'Monogram Alignment',
         description: 'On an authentic Neverfull, the LV monogram pattern is symmetrical and centered on the front. The LV logos should never be cut off at the seams, and the pattern should mirror perfectly when the bag is folded flat.',
         passDescription: 'Monogram is perfectly centered, symmetrical on both sides, and no logos are cut off at seams.',
@@ -34,6 +35,7 @@ const bags = [
       },
       {
         id: 'lv-nf-datecode',
+        image: 'https://images.unsplash.com/photo-1612902456551-404854679658?w=400&q=80',
         name: 'Date Code Format',
         description: 'Louis Vuitton uses a date code system: two letters indicating the factory location followed by four numbers (e.g., MI1023 = Made in France, week 10, 2023). Since March 2021, newer bags use microchips instead of date codes.',
         passDescription: 'Date code follows the correct format (2 letters + 4 numbers) with a valid factory code and plausible date, or has a microchip for newer models.',
@@ -44,6 +46,7 @@ const bags = [
       },
       {
         id: 'lv-nf-glazing',
+        image: 'https://images.unsplash.com/photo-1618354691792-d1d42acfd860?w=400&q=80',
         name: 'Edge Glazing',
         description: 'Authentic Neverfull bags have a deep red (sometimes called "cherry") glazing on all leather edges. The glazing should be smooth and even, applied precisely without bleeding onto the canvas or leather surface.',
         passDescription: 'Deep red glazing is even, smooth, and precisely applied along all leather edges with no bubbling or bleeding.',
@@ -54,6 +57,7 @@ const bags = [
       },
       {
         id: 'lv-nf-stitching',
+        image: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=400&q=80',
         name: 'Handle Stitching Count',
         description: 'Authentic Louis Vuitton bags have exactly 5 stitches per inch on the handles. The stitching is done with a specific mustard-yellow waxed linen thread that is slightly angled and perfectly uniform throughout.',
         passDescription: 'Exactly 5 even, angled stitches per inch in mustard-yellow waxed thread with no loose ends.',
@@ -64,6 +68,7 @@ const bags = [
       },
       {
         id: 'lv-nf-hardware',
+        image: 'https://images.unsplash.com/photo-1617038220319-276d3cfab638?w=400&q=80',
         name: 'Brass Hardware Weight',
         description: 'All hardware on an authentic Neverfull is solid brass with a noticeable weight. The D-rings, hooks, and clasp should feel substantial in hand and have a warm golden tone, not a bright yellow or lightweight feel.',
         passDescription: 'Hardware is heavy solid brass with warm golden tone, smooth finish, and clean engravings.',
@@ -74,6 +79,7 @@ const bags = [
       },
       {
         id: 'lv-nf-lining',
+        image: 'https://images.unsplash.com/photo-1613592536869-04f2c75fbbb3?w=400&q=80',
         name: 'Alcantara Lining',
         description: 'The Neverfull features a textile lining \u2014 beige with the classic monogram pattern, or a solid color depending on the edition. The lining should feel soft and be evenly attached with no bubbling or peeling.',
         passDescription: 'Lining is soft, evenly applied, and matches the correct pattern/color for the specific edition.',
@@ -84,6 +90,7 @@ const bags = [
       },
       {
         id: 'lv-nf-cinch-straps',
+        image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400&q=80',
         name: 'Cinch Straps Symmetry',
         description: 'The side cinch straps on the Neverfull should be perfectly symmetrical on both sides. When loosened, both sides should hang at the same length and width, and the leather tabs should be identically shaped.',
         passDescription: 'Cinch straps are perfectly symmetrical, same length on both sides, with identically shaped leather tabs.',
@@ -117,6 +124,7 @@ const bags = [
     checkpoints: [
       {
         id: 'lv-sp-shape',
+        image: 'https://images.unsplash.com/photo-1560343090-f0409e92791a?w=400&q=80',
         name: 'Rounded Shape Symmetry',
         description: 'The Speedy should maintain a consistent rounded barrel shape. When empty, it naturally sags slightly, but the proportions should remain symmetrical when viewed from the front. The base should be even and flat.',
         passDescription: 'Symmetrical barrel shape with even base, consistent proportions from all angles.',
@@ -127,6 +135,7 @@ const bags = [
       },
       {
         id: 'lv-sp-padlock',
+        image: 'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=400&q=80',
         name: 'Padlock Engraving',
         description: 'The padlock is stamped "LOUIS VUITTON" on the front and a number (e.g., 310) on the back. The font is clean, sharp, and deeply engraved. The lock should function smoothly with the included brass key.',
         passDescription: 'Clean, deep "LOUIS VUITTON" engraving with correct font, number on back, smooth key mechanism.',
@@ -137,6 +146,7 @@ const bags = [
       },
       {
         id: 'lv-sp-zipper',
+        image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&q=80',
         name: 'Zipper Pull Tab',
         description: 'Authentic Speedy bags use a high-quality brass zipper with a leather pull tab. The zipper should glide smoothly without catching. The pull tab should be neatly stitched with the same mustard-yellow thread used throughout.',
         passDescription: 'Smooth brass zipper, neatly stitched leather pull tab, zipper glides effortlessly.',
@@ -147,6 +157,7 @@ const bags = [
       },
       {
         id: 'lv-sp-handles',
+        image: 'https://images.unsplash.com/photo-1575032617751-6ddec2089882?w=400&q=80',
         name: 'Rolled Leather Handles',
         description: 'The Speedy\'s rolled handles are made from vachetta leather that patinas naturally over time from pale honey to a deep caramel. The handles should be perfectly round in cross-section with no visible seam on top.',
         passDescription: 'Perfectly round handles in natural vachetta leather with even patina and no visible top seam.',
@@ -157,6 +168,7 @@ const bags = [
       },
       {
         id: 'lv-sp-datecode',
+        image: 'https://images.unsplash.com/photo-1609505848912-b7c3b8b4beda?w=400&q=80',
         name: 'Date Code',
         description: 'Located on a leather tab inside the bag. Format is 2 factory letters + 4 date numbers. Newer models (post-2021) use an embedded microchip instead.',
         passDescription: 'Correct format with valid factory code, heat-stamped cleanly into a leather tab.',
@@ -167,6 +179,7 @@ const bags = [
       },
       {
         id: 'lv-sp-stitching',
+        image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80',
         name: 'Stitching Consistency',
         description: 'Every stitch on an authentic Speedy is uniform in size and spacing. Louis Vuitton uses a saddle stitch technique with two needles, resulting in slightly angled stitches that lean in alternating directions.',
         passDescription: 'Uniform stitch size/spacing throughout, slight alternating angle from saddle stitch technique.',
@@ -177,6 +190,7 @@ const bags = [
       },
       {
         id: 'lv-sp-monogram',
+        image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400&q=80',
         name: 'Monogram Pattern',
         description: 'The monogram canvas should be symmetrical across the front. On the Speedy, one side will show an upside-down LV \u2014 this is correct and expected due to the single-piece construction.',
         passDescription: 'Pattern is symmetrical on front, upside-down LV on back (correct for single-piece construction).',
@@ -210,6 +224,7 @@ const bags = [
     checkpoints: [
       {
         id: 'lv-al-vernis',
+        image: 'https://images.unsplash.com/photo-1597633611385-37e6c9f1f8e2?w=400&q=80',
         name: 'Vernis Leather Sheen',
         description: 'Monogram Vernis is a patent leather with an embossed monogram pattern. Authentic Vernis has a deep, lustrous sheen that changes subtly in different lighting. The embossed monogram should be crisp and evenly debossed.',
         passDescription: 'Deep lustrous patent sheen that shifts in light, with crisp and evenly embossed monogram.',
@@ -220,6 +235,7 @@ const bags = [
       },
       {
         id: 'lv-al-handles',
+        image: 'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&q=80',
         name: 'Top Handle Attachment',
         description: 'The Alma\'s two short handles attach with a leather "sangles" stitched to the body. The attachment points should have reinforced stitching and the handles should stand upright naturally. Count should be exactly 5 stitches per attachment point.',
         passDescription: 'Handles stand upright, attachment stitching is reinforced with exactly 5 stitches per point.',
@@ -230,6 +246,7 @@ const bags = [
       },
       {
         id: 'lv-al-lining',
+        image: 'https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?w=400&q=80',
         name: 'Alcantara Interior Lining',
         description: 'The Alma BB features a soft Alcantara (microfiber suede) interior lining. The color should match the exterior colorway \u2014 for example, rose ballerine exterior has a lighter pink lining.',
         passDescription: 'Soft Alcantara lining in the correct color for the specific colorway, evenly applied.',
@@ -240,6 +257,7 @@ const bags = [
       },
       {
         id: 'lv-al-zipper',
+        image: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=400&q=80',
         name: 'Zipper Alignment',
         description: 'The Alma\'s double zipper should align perfectly at the top center when fully closed. Both zippers should pull smoothly in both directions. The zipper tape should be hidden and not visible from the outside.',
         passDescription: 'Zippers meet perfectly at center, pull smoothly, zipper tape hidden from exterior view.',
@@ -250,6 +268,7 @@ const bags = [
       },
       {
         id: 'lv-al-datecode',
+        image: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?w=400&q=80',
         name: 'Date Code',
         description: 'Located on a small leather tab inside the bag, near the interior pocket. Same 2-letter + 4-number format as other LV bags.',
         passDescription: 'Clearly heat-stamped date code on interior leather tab with valid factory code.',
@@ -260,6 +279,7 @@ const bags = [
       },
       {
         id: 'lv-al-stamp',
+        image: 'https://images.unsplash.com/photo-1523779105320-d1cd346ff52b?w=400&q=80',
         name: 'Hot Stamp Logo',
         description: 'The "LOUIS VUITTON Paris \u2014 Made in France" hot stamp on the Alma is located under the front handle tab. The font should be clean, properly spaced, and heat-stamped (not printed).',
         passDescription: 'Clean heat-stamped text with proper font, spacing, and depth.',
@@ -293,6 +313,7 @@ const bags = [
     checkpoints: [
       {
         id: 'lv-kp-tag-font',
+        image: 'https://images.unsplash.com/photo-1589462173946-481ba48c2e82?w=400&q=80',
         name: 'Leather Tag Font',
         description: 'The luggage tag and poignet (handle holder) are stamped "LOUIS VUITTON Paris" in a specific serif font. The stamping should be clean and evenly deep, with consistent letter spacing.',
         passDescription: 'Clean, evenly stamped serif font with consistent depth and spacing on tag and poignet.',
@@ -303,6 +324,7 @@ const bags = [
       },
       {
         id: 'lv-kp-strap-hardware',
+        image: 'https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=400&q=80',
         name: 'Strap Hardware',
         description: 'The shoulder strap hardware (hooks and D-rings) should be heavy solid brass. The hooks should snap firmly and the swivel mechanism should rotate smoothly 360 degrees without grinding.',
         passDescription: 'Heavy brass hooks that snap firmly, smooth 360\u00b0 swivel rotation, warm golden tone.',
@@ -313,6 +335,7 @@ const bags = [
       },
       {
         id: 'lv-kp-pocket-stitching',
+        image: 'https://images.unsplash.com/photo-1582655299517-a5a1a42ece42?w=400&q=80',
         name: 'Interior Pocket Stitching',
         description: 'The interior open pocket is stitched with the same mustard-yellow thread. The pocket edges should be finished cleanly with no raw edges visible, and the stitching should be straight and evenly spaced.',
         passDescription: 'Clean pocket edges, straight even stitching in mustard-yellow thread, no raw edges.',
@@ -323,6 +346,7 @@ const bags = [
       },
       {
         id: 'lv-kp-canvas',
+        image: 'https://images.unsplash.com/photo-1523779105320-d1cd346ff52b?w=400&q=80',
         name: 'Canvas Texture',
         description: 'Authentic monogram canvas has a slightly textured feel \u2014 not smooth or plasticky. The canvas should feel substantial and slightly rigid, with a matte finish that is distinct from glossy counterfeits.',
         passDescription: 'Slightly textured, substantial canvas with a matte finish and correct brown/olive tone.',
@@ -333,6 +357,7 @@ const bags = [
       },
       {
         id: 'lv-kp-datecode',
+        image: 'https://images.unsplash.com/photo-1612902456551-404854679658?w=400&q=80',
         name: 'Date Code',
         description: 'Located inside the bag on a leather tab near the interior pocket. Follows the standard LV 2-letter + 4-number format.',
         passDescription: 'Correct format date code, cleanly heat-stamped on interior leather tab.',
@@ -343,6 +368,7 @@ const bags = [
       },
       {
         id: 'lv-kp-zipper',
+        image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80',
         name: 'Zipper Quality',
         description: 'The Keepall uses a heavy-duty brass zipper that should glide smoothly across the full length of the bag. The zipper pull should be engraved with "LOUIS VUITTON" in a clean, readable font.',
         passDescription: 'Heavy brass zipper glides smoothly with clean "LOUIS VUITTON" engraving on pull.',
@@ -380,6 +406,7 @@ const bags = [
     checkpoints: [
       {
         id: 'ch-cf-quilting',
+        image: 'https://images.unsplash.com/photo-1619113996870-1ae9a0fa8ac3?w=400&q=80',
         name: 'Quilting Stitch Count',
         description: 'Authentic Chanel diamond quilting has exactly 7-8 stitches per diamond side. The diamonds should be puffy and symmetrical, with stitching that follows straight lines across the entire bag without wavering.',
         passDescription: 'Exactly 7-8 even stitches per diamond side, puffy symmetrical diamonds, straight stitch lines.',
@@ -390,6 +417,7 @@ const bags = [
       },
       {
         id: 'ch-cf-turnlock',
+        image: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=400&q=80',
         name: 'CC Turn Lock Alignment',
         description: 'The interlocking CC turn lock should sit perfectly centered on the front flap. The right C overlaps on top at the top, and the left C overlaps on top at the bottom. The lock should rotate smoothly with a satisfying click.',
         passDescription: 'Perfectly centered CC with correct overlap pattern, smooth rotation, and firm click.',
@@ -400,6 +428,7 @@ const bags = [
       },
       {
         id: 'ch-cf-interior',
+        image: 'https://images.unsplash.com/photo-1613592536869-04f2c75fbbb3?w=400&q=80',
         name: 'Burgundy Interior',
         description: 'Classic Flap bags feature a signature burgundy (dark wine red) lambskin interior. The color should be consistent and the leather should feel soft and supple. The Chanel stamp inside reads "CHANEL" with "MADE IN FRANCE" or "MADE IN ITALY" below.',
         passDescription: 'Consistent burgundy lambskin interior, soft feel, clear "CHANEL" stamp with correct origin.',
@@ -410,6 +439,7 @@ const bags = [
       },
       {
         id: 'ch-cf-chain',
+        image: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=400&q=80',
         name: 'Chain Weight and Feel',
         description: 'The woven chain strap should feel heavy and substantial \u2014 genuine straps weigh noticeably more than counterfeits. The leather is woven through each link evenly, and the chain should drape naturally without kinking.',
         passDescription: 'Heavy, substantial chain with evenly woven leather, natural drape without kinks.',
@@ -420,6 +450,7 @@ const bags = [
       },
       {
         id: 'ch-cf-auth-card',
+        image: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?w=400&q=80',
         name: 'Authenticity Card',
         description: 'Chanel bags come with a black authenticity card featuring a gold-bordered hologram sticker with the serial number. The number on the card must match the serial sticker inside the bag. Note: Chanel discontinued auth cards in 2021, replacing them with microchips.',
         passDescription: 'Gold-bordered hologram on black card, serial matches interior sticker (or microchip for 2021+).',
@@ -430,6 +461,7 @@ const bags = [
       },
       {
         id: 'ch-cf-serial-sticker',
+        image: 'https://images.unsplash.com/photo-1609505848912-b7c3b8b4beda?w=400&q=80',
         name: 'Serial Number Sticker',
         description: 'Inside the bag, a white sticker with the serial number is placed in a hidden location (usually in the interior pocket). The sticker has a cross-hatch pattern visible when tilted under light, and the numbers are clearly printed.',
         passDescription: 'White sticker with visible cross-hatch pattern under light, clear numbers matching auth card.',
@@ -440,6 +472,7 @@ const bags = [
       },
       {
         id: 'ch-cf-back-pocket',
+        image: 'https://images.unsplash.com/photo-1560343090-f0409e92791a?w=400&q=80',
         name: 'Back Pocket Quilting',
         description: 'The back slip pocket should have quilting that aligns perfectly with the quilting on the bag body. The diamonds should continue seamlessly across the pocket seam.',
         passDescription: 'Quilting aligns perfectly across the back pocket seam, seamless diamond continuation.',
@@ -473,6 +506,7 @@ const bags = [
     checkpoints: [
       {
         id: 'ch-bb-hardware-finish',
+        image: 'https://images.unsplash.com/photo-1617038220319-276d3cfab638?w=400&q=80',
         name: 'Brushed Hardware Finish',
         description: 'The Boy Bag is known for its aged/brushed hardware finish (ruthenium, aged gold, or aged silver). The finish should appear naturally distressed and consistent across all hardware pieces, not splotchy or painted.',
         passDescription: 'Consistent aged/brushed finish across all hardware, naturally distressed appearance.',
@@ -483,6 +517,7 @@ const bags = [
       },
       {
         id: 'ch-bb-chain',
+        image: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=400&q=80',
         name: 'Strap Chain Quality',
         description: 'The Boy Bag chain is a chunky, structured chain (not woven with leather like the Classic Flap). Each link should be uniform and heavy. The chain should lay flat and not twist easily.',
         passDescription: 'Heavy uniform chain links, lays flat, doesn\'t twist, substantial weight.',
@@ -493,6 +528,7 @@ const bags = [
       },
       {
         id: 'ch-bb-clasp',
+        image: 'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=400&q=80',
         name: 'CC Clasp Symmetry',
         description: 'The large CC push-lock clasp on the Boy Bag should have perfectly symmetrical interlocking Cs. The clasp mechanism should push and release smoothly. The CC should be centered on the front panel.',
         passDescription: 'Perfectly symmetrical CC, smooth push/release mechanism, centered on front panel.',
@@ -503,6 +539,7 @@ const bags = [
       },
       {
         id: 'ch-bb-stamp',
+        image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400&q=80',
         name: 'Interior Stamp Font',
         description: 'Inside the Boy Bag, "CHANEL" is stamped in a specific font \u2014 clean, sans-serif-like capitals with even spacing. Below it reads "MADE IN FRANCE" or "MADE IN ITALY." The stamp should be heat-pressed, not printed.',
         passDescription: 'Clean heat-pressed stamp with correct font, even spacing, and proper origin text.',
@@ -513,6 +550,7 @@ const bags = [
       },
       {
         id: 'ch-bb-quilting',
+        image: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=400&q=80',
         name: 'Quilting Pattern',
         description: 'The Boy Bag quilting should be puffy and symmetrical. Stitch count is 7-8 per diamond side, matching Chanel standards. The quilting should be even and consistent across all panels.',
         passDescription: 'Puffy, symmetrical quilting with 7-8 stitches per diamond, consistent across all panels.',
@@ -523,6 +561,7 @@ const bags = [
       },
       {
         id: 'ch-bb-serial',
+        image: 'https://images.unsplash.com/photo-1612902456551-404854679658?w=400&q=80',
         name: 'Serial Number',
         description: 'Same serial system as other Chanel bags \u2014 interior sticker with cross-hatch pattern (pre-2021) or microchip (2021+).',
         passDescription: 'Valid serial sticker with cross-hatch or microchip, number within correct range for production year.',
@@ -555,6 +594,7 @@ const bags = [
     checkpoints: [
       {
         id: 'ch-woc-chain-drop',
+        image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80',
         name: 'Chain Drop Length',
         description: 'The authentic WOC has a chain drop of approximately 24 inches, allowing it to be worn crossbody. The chain should be interwoven with leather and feel substantial for its size.',
         passDescription: 'Chain drop approximately 24 inches, leather evenly woven through links, substantial feel.',
@@ -565,6 +605,7 @@ const bags = [
       },
       {
         id: 'ch-woc-caviar',
+        image: 'https://images.unsplash.com/photo-1618354691792-d1d42acfd860?w=400&q=80',
         name: 'Caviar Leather Texture',
         description: 'Caviar leather has a distinctive pebbled texture that is uniform across the surface. It should feel slightly rough to the touch but not sandpapery. The texture should be consistent with no smooth patches or overly large pebbles.',
         passDescription: 'Uniform pebbled texture, slightly rough but pleasant feel, consistent grain throughout.',
@@ -575,6 +616,7 @@ const bags = [
       },
       {
         id: 'ch-woc-snap',
+        image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&q=80',
         name: 'Snap Closure Quality',
         description: 'The CC snap closure on the front flap should close with a firm, satisfying snap. It should not be too tight (hard to open) or too loose (opens easily in a bag). The CC logo on the snap should be cleanly defined.',
         passDescription: 'Firm satisfying snap closure, easy to open intentionally, CC logo cleanly defined.',
@@ -585,6 +627,7 @@ const bags = [
       },
       {
         id: 'ch-woc-interior-layout',
+        image: 'https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?w=400&q=80',
         name: 'Interior Card Slots',
         description: 'The WOC interior should have multiple card slots (typically 6), a zippered coin compartment, and an open pocket behind the flap. All compartments should be cleanly constructed with finished edges.',
         passDescription: 'Correct number of card slots, clean zippered compartment, finished edges throughout.',
@@ -595,6 +638,7 @@ const bags = [
       },
       {
         id: 'ch-woc-quilting',
+        image: 'https://images.unsplash.com/photo-1619113996870-1ae9a0fa8ac3?w=400&q=80',
         name: 'Quilting Consistency',
         description: 'Even on the smaller WOC, Chanel maintains 7-8 stitches per diamond side. The diamonds should be proportionally sized for the smaller bag and symmetrical.',
         passDescription: '7-8 stitches per diamond, proportional diamond size, symmetrical pattern.',
@@ -605,6 +649,7 @@ const bags = [
       },
       {
         id: 'ch-woc-serial',
+        image: 'https://images.unsplash.com/photo-1609505848912-b7c3b8b4beda?w=400&q=80',
         name: 'Serial Number',
         description: 'Located inside the bag on a sticker (pre-2021) or via microchip (2021+). The serial sticker should have the characteristic cross-hatch pattern.',
         passDescription: 'Valid serial sticker with cross-hatch or microchip, number in correct range.',
@@ -640,6 +685,7 @@ const bags = [
     checkpoints: [
       {
         id: 'gu-di-tiger',
+        image: 'https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=400&q=80',
         name: 'Tiger Head Clasp Detail',
         description: 'The Dionysus tiger head clasp (spur closure) should have finely detailed features \u2014 visible fur texture, defined eyes, and an open mouth. The clasp is a push mechanism on the underside that should open and close smoothly.',
         passDescription: 'Finely detailed tiger with visible fur texture, defined eyes, smooth push mechanism.',
@@ -650,6 +696,7 @@ const bags = [
       },
       {
         id: 'gu-di-canvas',
+        image: 'https://images.unsplash.com/photo-1597633611385-37e6c9f1f8e2?w=400&q=80',
         name: 'GG Supreme Canvas Texture',
         description: 'Gucci\'s GG Supreme canvas should have a coated feel that is slightly stiff but not plasticky. The GG pattern should be evenly printed with crisp edges. The base color should be a specific beige/ebony tone.',
         passDescription: 'Slightly stiff coated canvas, crisp GG pattern, correct beige/ebony tone.',
@@ -660,6 +707,7 @@ const bags = [
       },
       {
         id: 'gu-di-chain',
+        image: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=400&q=80',
         name: 'Chain Strap Weight',
         description: 'The Dionysus chain strap is substantial and should feel heavy in hand. It\'s a burnished gold or silver-tone chain that should drape naturally and not feel hollow or tinny.',
         passDescription: 'Heavy chain with burnished finish, drapes naturally, feels solid.',
@@ -670,6 +718,7 @@ const bags = [
       },
       {
         id: 'gu-di-suede',
+        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80',
         name: 'Suede Lining',
         description: 'The interior features a soft suede lining in a color that complements the exterior. The suede should feel plush and show natural nap direction. It should be evenly applied with no visible glue.',
         passDescription: 'Plush suede with natural nap, even application, no visible glue, correct color.',
@@ -680,6 +729,7 @@ const bags = [
       },
       {
         id: 'gu-di-stitching',
+        image: 'https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400&q=80',
         name: 'Edge Stitching',
         description: 'All stitching should be even and tight, with no loose threads. The thread color matches the leather trim, and the stitch count should be consistent throughout the bag.',
         passDescription: 'Even, tight stitching throughout, matching thread color, consistent stitch count.',
@@ -690,6 +740,7 @@ const bags = [
       },
       {
         id: 'gu-di-serial',
+        image: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?w=400&q=80',
         name: 'Serial Number Tag',
         description: 'Gucci bags have a leather tag inside with the serial number embossed. The tag should also feature the Gucci logo and "Made in Italy." The font and spacing are specific and consistent.',
         passDescription: 'Clean embossed serial on leather tag with correct Gucci logo and "Made in Italy."',
@@ -723,6 +774,7 @@ const bags = [
     checkpoints: [
       {
         id: 'gu-mm-chevron',
+        image: 'https://images.unsplash.com/photo-1582655299517-a5a1a42ece42?w=400&q=80',
         name: 'Chevron Stitch Pattern',
         description: 'The Marmont\'s chevron (matelass\u00e9) stitching should create a consistent V-pattern across the entire bag. The Vs should be symmetrical and the padding between stitches should be evenly puffy.',
         passDescription: 'Consistent symmetrical V-pattern, evenly puffy padding, clean stitch lines.',
@@ -733,6 +785,7 @@ const bags = [
       },
       {
         id: 'gu-mm-gg-hardware',
+        image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80',
         name: 'GG Hardware Casting',
         description: 'The double-G hardware on the flap should be a single cast piece with smooth, rounded edges. The antique gold finish should be even, and the Gs should be perfectly symmetrical. The hardware should feel solid and substantial.',
         passDescription: 'Single cast piece, smooth rounded edges, even antique gold finish, symmetrical Gs.',
@@ -743,6 +796,7 @@ const bags = [
       },
       {
         id: 'gu-mm-heart',
+        image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400&q=80',
         name: 'Heart on Back',
         description: 'The back of the GG Marmont features a small stitched heart shape at the top. This is a signature detail \u2014 the heart should be neatly stitched with the same thread color as the chevron stitching.',
         passDescription: 'Neatly stitched heart at back top, correct size and position, matching thread color.',
@@ -753,6 +807,7 @@ const bags = [
       },
       {
         id: 'gu-mm-zipper',
+        image: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=400&q=80',
         name: 'Zipper Quality',
         description: 'The top zipper should glide smoothly and feature a leather pull tab. The zipper teeth should be evenly aligned and the tape should not be visible from the outside when closed.',
         passDescription: 'Smooth zipper action, leather pull tab, even teeth, hidden tape when closed.',
@@ -763,6 +818,7 @@ const bags = [
       },
       {
         id: 'gu-mm-leather',
+        image: 'https://images.unsplash.com/photo-1575032617751-6ddec2089882?w=400&q=80',
         name: 'Leather Quality',
         description: 'The Marmont uses a soft, pliable calfskin or matelass\u00e9 leather. It should feel luxurious and slightly grainy to the touch, with a consistent color and no chemical smell.',
         passDescription: 'Soft, pliable calfskin with slight grain, consistent color, pleasant leather scent.',
@@ -773,6 +829,7 @@ const bags = [
       },
       {
         id: 'gu-mm-serial',
+        image: 'https://images.unsplash.com/photo-1612902456551-404854679658?w=400&q=80',
         name: 'Serial Number',
         description: 'Located on an interior leather tab \u2014 embossed with the Gucci logo above and the serial number below. Numbers should be cleanly stamped in a specific font.',
         passDescription: 'Clean embossed serial on leather tab with Gucci logo, correct font and spacing.',
@@ -806,6 +863,7 @@ const bags = [
     checkpoints: [
       {
         id: 'gu-op-webstripe',
+        image: 'https://images.unsplash.com/photo-1589462173946-481ba48c2e82?w=400&q=80',
         name: 'Web Stripe Alignment',
         description: 'The signature green-red-green (or blue-red-blue) web stripe should be perfectly centered on the bag and aligned with the overall structure. The stripe colors should be specific shades \u2014 not too bright or dull.',
         passDescription: 'Perfectly centered web stripe with correct green/red shades, crisp edges.',
@@ -816,6 +874,7 @@ const bags = [
       },
       {
         id: 'gu-op-zipper-pull',
+        image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&q=80',
         name: 'Zipper Pull Engraving',
         description: 'The zipper pull should be engraved with "GUCCI" in a clean, consistent font. The engraving should be sharp and readable, not shallow or blurry. The pull itself should be a substantial metal piece.',
         passDescription: 'Sharp "GUCCI" engraving in correct font, substantial metal pull.',
@@ -826,6 +885,7 @@ const bags = [
       },
       {
         id: 'gu-op-canvas',
+        image: 'https://images.unsplash.com/photo-1523779105320-d1cd346ff52b?w=400&q=80',
         name: 'GG Supreme Canvas',
         description: 'The canvas should have the same coated, slightly stiff feel as other GG Supreme pieces. The GG pattern should be evenly printed with the correct beige/ebony color combination.',
         passDescription: 'Coated canvas with correct stiffness, even GG pattern, right beige/ebony tones.',
@@ -836,6 +896,7 @@ const bags = [
       },
       {
         id: 'gu-op-stitching',
+        image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80',
         name: 'Trim Stitching',
         description: 'The leather trim stitching should be even and uniform throughout. Thread color should match the leather trim, and there should be no loose threads or skipped stitches.',
         passDescription: 'Even uniform stitching, matching thread color, no loose threads or skips.',
@@ -846,6 +907,7 @@ const bags = [
       },
       {
         id: 'gu-op-interior',
+        image: 'https://images.unsplash.com/photo-1613592536869-04f2c75fbbb3?w=400&q=80',
         name: 'Interior Construction',
         description: 'The interior should be lined with a quality fabric (usually suede or canvas) in the correct color. All interior seams should be clean and finished, with no visible glue or raw edges.',
         passDescription: 'Quality lining in correct color, clean finished seams, no visible glue.',
@@ -856,6 +918,7 @@ const bags = [
       },
       {
         id: 'gu-op-serial',
+        image: 'https://images.unsplash.com/photo-1609505848912-b7c3b8b4beda?w=400&q=80',
         name: 'Serial Number',
         description: 'Interior leather tab embossed with the Gucci logo and serial number. Same format and quality standards as other Gucci bags.',
         passDescription: 'Clean embossed serial and logo on interior leather tab, correct format.',

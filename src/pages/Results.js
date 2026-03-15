@@ -1,32 +1,37 @@
 import React, { useState, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import jsPDF from 'jspdf';
 import BackgroundImage from '../components/BackgroundImage';
+import { LogoMark } from '../components/Logo';
+import { createChecklistChallenge, encodeChallenge } from '../utils/challengeCodec';
+import generatePremiumPDF from '../utils/pdfReport';
 
 function getVerdict(percentage) {
   if (percentage >= 80)
     return {
       label: 'Strong Indicators of Authenticity',
-      color: '#48BB78',
+      color: '#5B8C6A',
+      colorRgb: '91, 140, 106',
       rec: 'Your inspection found strong authenticity markers. For full peace of mind on high-value items, consider a professional authentication service.',
     };
   if (percentage >= 50)
     return {
       label: 'Mixed Results \u2014 Investigate Further',
-      color: '#D69E2E',
+      color: '#C4956A',
+      colorRgb: '196, 149, 106',
       rec: 'Several markers need closer inspection. We recommend having this item reviewed by a professional before purchasing.',
     };
   return {
     label: 'Multiple Warning Signs Detected',
-    color: '#F56565',
+    color: '#A65D5D',
+    colorRgb: '166, 93, 93',
     rec: 'Multiple markers raised concerns. We strongly recommend professional authentication before purchasing this item.',
   };
 }
 
 const answerIcons = {
-  pass: { icon: '\u2713', color: '#48BB78', text: 'Pass' },
-  fail: { icon: '\u2717', color: '#F56565', text: 'Fail' },
-  unsure: { icon: '?', color: '#A0A0A0', text: 'Unsure' },
+  pass: { icon: '\u2713', color: '#5B8C6A', text: 'Pass' },
+  fail: { icon: '\u2717', color: '#A65D5D', text: 'Fail' },
+  unsure: { icon: '?', color: '#9B9285', text: 'Unsure' },
 };
 
 function isPaid() {
@@ -41,123 +46,6 @@ function isSubscribed() {
 
 function fmtCurrency(n) {
   return n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-}
-
-// ─── PDF Generation ──────────────────────────────────────────
-function generatePDF(bag, details, earned, max, percentage, verdict) {
-  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-  const w = doc.internal.pageSize.getWidth();
-  let y = 20;
-  const lm = 20;
-  const cw = w - 40;
-
-  const pageCheck = (need) => { if (y + need > 275) { doc.addPage(); y = 20; } };
-  const divider = () => { doc.setDrawColor(200); doc.line(lm, y, w - 20, y); y += 8; };
-
-  // Wordmark: "Luxe" thin italic gold · dot · "Check" bold dark
-  doc.setFontSize(22);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(201, 168, 76);
-  doc.text('Luxe', lm, y + 2);
-  const luxeW = doc.getTextWidth('Luxe');
-  // Gold dot accent
-  doc.setFillColor(201, 168, 76);
-  doc.circle(lm + luxeW + 3, y - 1, 0.9, 'F');
-  // "Check" in bold dark
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(50, 50, 50);
-  doc.text('Check', lm + luxeW + 7, y + 2);
-  y += 8;
-
-  doc.setFontSize(8); doc.setFont('helvetica', 'normal'); doc.setTextColor(150);
-  doc.text('Authentication Report', lm, y); y += 4;
-  doc.text(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), lm, y);
-  y += 12; divider();
-
-  // Bag + Score
-  doc.setTextColor(0); doc.setFontSize(16); doc.setFont('helvetica', 'bold');
-  doc.text(`${bag.brand} \u2014 ${bag.model}`, lm, y); y += 12;
-  doc.setFontSize(36); doc.text(`${percentage}%`, lm, y);
-  doc.setFontSize(12); doc.setFont('helvetica', 'normal');
-  doc.text(verdict.label, lm + 40, y - 4);
-  doc.setFontSize(9); doc.setTextColor(100);
-  doc.text(`${earned} / ${max} points across ${details.length} checkpoints`, lm + 40, y + 2);
-  y += 16; divider();
-
-  // Red Flags
-  if (bag.commonFakes && bag.commonFakes.length > 0) {
-    pageCheck(40);
-    doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0);
-    doc.text(`Top Red Flags for ${bag.model}`, lm, y); y += 8;
-    bag.commonFakes.forEach((flag) => {
-      pageCheck(12);
-      doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(60);
-      const lines = doc.splitTextToSize(`\u2022 ${flag}`, cw - 4);
-      doc.text(lines, lm + 2, y); y += lines.length * 4.5 + 2;
-    });
-    y += 4; divider();
-  }
-
-  // Year Variations
-  if (bag.yearVariations && bag.yearVariations.length > 0) {
-    pageCheck(30);
-    doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0);
-    doc.text('Model-Year Variations', lm, y); y += 8;
-    bag.yearVariations.forEach((v) => {
-      pageCheck(12);
-      doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0);
-      doc.text(v.year, lm + 2, y);
-      doc.setFont('helvetica', 'normal'); doc.setTextColor(80);
-      const lines = doc.splitTextToSize(v.detail, cw - 30);
-      doc.text(lines, lm + 28, y); y += Math.max(lines.length * 4.5, 5) + 3;
-    });
-    y += 4; divider();
-  }
-
-  // Checkpoint Breakdown
-  doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0);
-  doc.text('Checkpoint Breakdown', lm, y); y += 8;
-  details.forEach((cp) => {
-    pageCheck(22);
-    const ans = answerIcons[cp.answer] || answerIcons.unsure;
-    doc.setFontSize(10); doc.setFont('helvetica', 'bold'); doc.setTextColor(0);
-    doc.text(`${ans.icon} ${cp.name}`, lm, y);
-    doc.setFont('helvetica', 'normal'); doc.setTextColor(120);
-    doc.text(`${ans.text}  |  ${cp.category}  |  ${cp.points}/${cp.weight} pts`, lm + 2, y + 5);
-    if (cp.whyItMatters) {
-      doc.setFontSize(8); doc.setTextColor(100);
-      const why = doc.splitTextToSize(cp.whyItMatters, cw - 4);
-      doc.text(why, lm + 2, y + 10); y += why.length * 3.5;
-    }
-    y += 14;
-  });
-
-  // Resale Value
-  if (bag.resaleRange) {
-    y += 2; divider(); pageCheck(15);
-    doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0);
-    doc.text(`Estimated Resale Value: ${fmtCurrency(bag.resaleRange.low)} \u2013 ${fmtCurrency(bag.resaleRange.high)}`, lm, y);
-    y += 5;
-    doc.setFontSize(8); doc.setFont('helvetica', 'normal'); doc.setTextColor(120);
-    doc.text(`Condition: ${bag.resaleRange.condition}`, lm, y);
-    y += 10;
-  }
-
-  // Recommendation
-  divider(); pageCheck(20);
-  doc.setFontSize(10); doc.setFont('helvetica', 'bold'); doc.setTextColor(0);
-  doc.text('Recommendation', lm, y); y += 6;
-  doc.setFont('helvetica', 'normal'); doc.setTextColor(80);
-  const recLines = doc.splitTextToSize(verdict.rec, cw);
-  doc.text(recLines, lm, y); y += recLines.length * 5 + 10;
-
-  // Disclaimer
-  pageCheck(15);
-  doc.setFontSize(7); doc.setTextColor(150);
-  const disc = 'LuxeCheck is an educational reference tool. This report reflects your own visual inspection and does not constitute a professional authentication. Always consult a professional authenticator for high-value purchases.';
-  doc.text(doc.splitTextToSize(disc, cw), lm, y);
-
-  doc.save(`LuxeCheck-${bag.brand}-${bag.model}-${percentage}pct.pdf`);
 }
 
 // ─── Share ───────────────────────────────────────────────────
@@ -178,6 +66,7 @@ function Results() {
   const paid = isPaid();
   const subscribed = isSubscribed();
   const [copiedMsg, setCopiedMsg] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
 
   const bag = state?.bag;
   const details = state?.details;
@@ -201,7 +90,7 @@ function Results() {
         <div style={{ textAlign: 'center', paddingTop: '120px' }}>
           <h1 style={s.heading}>No Results</h1>
           <p style={s.muted}>Complete a checklist first to see your results.</p>
-          <button style={s.ctaBtn} onClick={() => navigate('/scan')}>Start a Check</button>
+          <button className="btn-luxe glass-btn-primary" style={s.ctaBtn} onClick={() => navigate('/scan')}>Start a Check</button>
         </div>
       </div>
     );
@@ -216,23 +105,30 @@ function Results() {
 
   return (
     <div style={s.page}>
-      <BackgroundImage url="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1920" opacity={0.08} />
+      <BackgroundImage url="https://images.unsplash.com/photo-1603739592262-e66a6708e141?w=1920&q=80" opacity={0.20} />
       {/* Header */}
       <button style={s.backBtn} onClick={() => navigate('/scan')}>&larr; New Check</button>
       <div style={s.subtitle}>{bag.brand} &middot; {bag.model}</div>
 
       {/* ─── Score + Verdict ──────────────────────────────── */}
       <div style={s.scoreSection}>
-        <div style={{ ...s.scoreCircle, borderColor: verdict.color }}>
-          <span style={s.scoreNumber}>{percentage}</span>
-          <span style={s.scorePercent}>%</span>
+        <div style={s.scoreWithSeal}>
+          <div style={{ ...s.scoreCircle, borderColor: verdict.color }}>
+            <span style={s.scoreNumber}>{percentage}</span>
+            <span style={s.scorePercent}>%</span>
+          </div>
+          <div style={s.sealBadge}>
+            <LogoMark size={28} color="var(--color-gold)" />
+            <span style={s.sealText}>Verified Check</span>
+          </div>
         </div>
-        <div style={{ ...s.verdictBadge, backgroundColor: verdict.color }}>{verdict.label}</div>
+        <span style={s.aiLabel}>AI Analysis</span>
+        <div className="glass-badge" style={{ ...s.verdictBadge, backgroundColor: `rgba(${verdict.colorRgb}, 0.15)`, color: verdict.color, boxShadow: `0 0 16px rgba(${verdict.colorRgb}, 0.12)` }}>{verdict.label}</div>
         <p style={s.scoreBreakdown}>{earned} / {max} points across {details.length} checkpoints</p>
       </div>
 
       <div style={s.inspectionDisclaimer}>
-        This checklist reflects your own visual inspection. It is not a professional authentication.
+        This AI-generated assessment is based on your visual inspection matched against our authentication database of known markers across hundreds of luxury products.
       </div>
 
       {/* ─── FREE: Simple checkpoint list ─────────────────── */}
@@ -251,7 +147,7 @@ function Results() {
       {/* ─── FREE: Preview card (what paid includes) ──────── */}
       {!paid && (
         <>
-          <div style={s.previewCard}>
+          <div className="glass-card" style={s.previewCard}>
             <h3 style={s.previewTitle}>Your full report includes 4 exclusive sections</h3>
             <div style={s.previewList}>
               {paidSections.map((sec) => (
@@ -265,7 +161,7 @@ function Results() {
                 </div>
               ))}
             </div>
-            <button style={s.upgradeBtn} onClick={() => navigate('/pricing')}>
+            <button className="btn-luxe glass-btn-primary" style={s.upgradeBtn} onClick={() => navigate('/pricing')}>
               Unlock Full Report &mdash; $6.99
             </button>
           </div>
@@ -328,7 +224,7 @@ function Results() {
               : cp.answer === 'fail' ? cp.failDescription
               : 'You were unsure about this checkpoint.';
             return (
-              <div key={cp.id} style={s.detailCard}>
+              <div key={cp.id} className="glass-card" style={s.detailCard}>
                 <div style={s.cardHeader}>
                   <span style={{ ...s.cardIconWrap, color: ans.color }}>{ans.icon}</span>
                   <span style={s.cardName}>{cp.name}</span>
@@ -353,7 +249,7 @@ function Results() {
           {bag.resaleRange && (
             <>
               <div style={s.sectionDivider} />
-              <div style={s.resaleCard}>
+              <div className="glass-card" style={s.resaleCard}>
                 <span style={s.resaleLabel}>Estimated Resale Value</span>
                 <span style={s.resaleValue}>
                   {fmtCurrency(bag.resaleRange.low)} &ndash; {fmtCurrency(bag.resaleRange.high)}
@@ -370,10 +266,27 @@ function Results() {
 
           {/* PDF */}
           <button
+            className="btn-luxe glass-btn-secondary"
             style={s.pdfBtn}
-            onClick={() => generatePDF(bag, details, earned, max, percentage, verdict)}
+            disabled={pdfLoading}
+            onClick={async () => {
+              setPdfLoading(true);
+              try {
+                await generatePremiumPDF(bag, details, earned, max, percentage, verdict);
+              } catch (e) {
+                console.error('PDF generation failed:', e);
+              }
+              setPdfLoading(false);
+            }}
           >
-            {'\u2193'} Download PDF Report
+            {pdfLoading ? (
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                <span className="luxe-dots"><span /><span /><span /></span>
+                Preparing your report...
+              </span>
+            ) : (
+              '\u2193 Download PDF Report'
+            )}
           </button>
         </>
       )}
@@ -386,8 +299,8 @@ function Results() {
       </div>
 
       <div style={s.actionGrid}>
-        <button style={s.actionBtn} onClick={() => navigate('/scan')}>Check Another Bag</button>
-        <button style={s.actionBtn} onClick={() => {
+        <button className="btn-luxe glass-btn-secondary" style={s.actionBtn} onClick={() => navigate('/scan')}>Check Another Bag</button>
+        <button className="btn-luxe glass-btn-secondary" style={s.actionBtn} onClick={() => {
           if (!subscribed) { navigate('/pricing'); return; }
           try {
             const existing = JSON.parse(localStorage.getItem('luxecheck_collection') || '[]');
@@ -402,7 +315,12 @@ function Results() {
           } catch {}
           navigate('/collection');
         }}>Save to Collection</button>
-        <button style={{ ...s.actionBtn, ...s.actionBtnFull }} onClick={handleShare}>
+        <button className="btn-luxe glass-btn-secondary" style={s.actionBtn} onClick={() => {
+          const challenge = createChecklistChallenge(bag, details, percentage);
+          const encoded = encodeChallenge(challenge);
+          navigate(`/challenge?data=${encoded}`);
+        }}>Challenge a Friend</button>
+        <button className="btn-luxe glass-btn-primary" style={{ ...s.actionBtn, ...s.actionBtnFull }} onClick={handleShare}>
           {copiedMsg ? 'Copied to clipboard!' : 'Share Results'}
         </button>
       </div>
@@ -418,84 +336,88 @@ const s = {
 
   subtitle: { fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 500, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-cream-muted)', marginBottom: '32px', opacity: 0.6 },
 
-  heading: { fontFamily: 'var(--font-heading)', fontSize: '2rem', color: 'var(--color-cream)', marginBottom: '12px' },
-  muted: { fontFamily: 'var(--font-body)', fontSize: '1rem', color: 'var(--color-cream-muted)', marginBottom: '32px' },
+  heading: { fontFamily: 'var(--font-heading)', fontSize: '2rem', color: 'var(--color-cream)', marginBottom: '12px', letterSpacing: '0.15em', textTransform: 'uppercase' },
+  muted: { fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 300, color: 'var(--color-cream-muted)', marginBottom: '32px' },
 
   // Score
   scoreSection: { textAlign: 'center', marginBottom: '20px' },
-  scoreCircle: { width: '140px', height: '140px', borderRadius: '50%', border: '4px solid', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', gap: '2px' },
+  scoreWithSeal: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', marginBottom: '24px' },
+  scoreCircle: { width: '140px', height: '140px', borderRadius: '50%', border: '4px solid', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2px', background: 'rgba(255, 255, 255, 0.02)', transition: 'all 0.4s ease' },
+  sealBadge: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', opacity: 0.7 },
+  sealText: { fontFamily: 'var(--font-body)', fontSize: '0.6rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-gold)' },
   scoreNumber: { fontFamily: 'var(--font-heading)', fontSize: '3rem', fontWeight: 700, color: 'var(--color-cream)', lineHeight: 1 },
   scorePercent: { fontFamily: 'var(--font-body)', fontSize: '1.25rem', color: 'var(--color-cream-muted)', alignSelf: 'flex-start', marginTop: '12px' },
-  verdictBadge: { fontFamily: 'var(--font-body)', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#0A0A0A', display: 'inline-block', padding: '8px 20px', marginBottom: '12px' },
-  scoreBreakdown: { fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--color-cream-muted)' },
+  verdictBadge: { fontFamily: 'var(--font-body)', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-cream)', display: 'inline-block', padding: '8px 20px', marginBottom: '12px', borderRadius: '12px', transition: 'all 0.4s ease' },
+  aiLabel: { fontFamily: 'var(--font-body)', fontSize: '10px', fontWeight: 500, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#D4B978', marginBottom: '8px' },
+  scoreBreakdown: { fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 300, color: 'var(--color-cream-muted)' },
 
-  inspectionDisclaimer: { fontFamily: 'var(--font-body)', fontSize: '0.8rem', lineHeight: 1.5, color: 'var(--color-cream-muted)', textAlign: 'center', fontStyle: 'italic', padding: '16px 20px', marginBottom: '32px', borderLeft: '2px solid var(--color-border)', borderRight: '2px solid var(--color-border)', opacity: 0.7 },
+  inspectionDisclaimer: { fontFamily: 'var(--font-body)', fontSize: '0.8rem', fontWeight: 300, lineHeight: 1.5, color: 'var(--color-cream-muted)', textAlign: 'center', fontStyle: 'italic', padding: '16px 20px', marginBottom: '32px', borderLeft: '2px solid var(--color-border)', borderRight: '2px solid var(--color-border)', opacity: 0.7 },
 
-  sectionDivider: { height: '1px', background: 'var(--color-border)', marginBottom: '24px' },
-  sectionTitle: { fontFamily: 'var(--font-heading)', fontSize: '1.125rem', fontWeight: 600, color: 'var(--color-cream)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' },
+  sectionDivider: { height: '1px', background: 'rgba(184, 148, 95, 0.08)', marginBottom: '24px' },
+  sectionTitle: { fontFamily: 'var(--font-heading)', fontSize: '1.125rem', fontWeight: 600, color: 'var(--color-cream)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', letterSpacing: '0.15em', textTransform: 'uppercase' },
   sectionIcon: { fontSize: '0.9rem', color: 'var(--color-gold)' },
 
   // Simple checkpoint list (free)
-  simpleRow: { display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: '1px solid rgba(201, 168, 76, 0.08)' },
+  simpleRow: { display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: '1px solid rgba(184, 148, 95, 0.08)' },
   simpleIcon: { fontSize: '1rem', width: '20px', textAlign: 'center', flexShrink: 0 },
-  simpleName: { fontFamily: 'var(--font-body)', fontSize: '0.9rem', color: 'var(--color-cream)' },
+  simpleName: { fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'var(--color-cream)' },
 
   // Preview card (free)
-  previewCard: { margin: '32px 0', border: '1px solid var(--color-gold)', background: 'rgba(201, 168, 76, 0.03)', padding: '28px 24px', textAlign: 'center' },
-  previewTitle: { fontFamily: 'var(--font-heading)', fontSize: '1.15rem', fontWeight: 600, color: 'var(--color-cream)', marginBottom: '20px' },
+  previewCard: { margin: '32px 0', padding: '28px 24px', textAlign: 'center', borderRadius: '12px' },
+  previewTitle: { fontFamily: 'var(--font-heading)', fontSize: '1.15rem', fontWeight: 600, color: 'var(--color-cream)', marginBottom: '20px', letterSpacing: '0.15em', textTransform: 'uppercase' },
   previewList: { textAlign: 'left', marginBottom: '24px' },
   previewItem: { display: 'flex', alignItems: 'center', gap: '14px', padding: '12px 0', borderBottom: '1px solid var(--color-border)' },
   previewIcon: { fontSize: '1rem', color: 'var(--color-gold)', width: '24px', textAlign: 'center', flexShrink: 0 },
   previewItemTitle: { fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-cream)', marginBottom: '2px' },
-  previewItemDesc: { fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: 'var(--color-cream-muted)' },
+  previewItemDesc: { fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 300, color: 'var(--color-cream-muted)' },
   previewLock: { marginLeft: 'auto', fontSize: '0.9rem', color: 'var(--color-gold)', opacity: 0.4, flexShrink: 0 },
-  upgradeBtn: { fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-bg)', backgroundColor: 'var(--color-gold)', border: 'none', padding: '14px 36px', cursor: 'pointer', letterSpacing: '0.05em' },
+  upgradeBtn: { fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-cream)', padding: '14px 36px', cursor: 'pointer', letterSpacing: '0.05em' },
 
   // Red flags (paid)
   redFlagList: { marginBottom: '28px' },
   redFlagItem: { display: 'flex', gap: '10px', padding: '8px 0', alignItems: 'flex-start' },
-  redFlagBullet: { color: '#F56565', fontSize: '1.1rem', lineHeight: 1.5, flexShrink: 0 },
-  redFlagText: { fontFamily: 'var(--font-body)', fontSize: '0.875rem', lineHeight: 1.6, color: 'var(--color-cream-muted)' },
+  redFlagBullet: { color: '#A65D5D', fontSize: '1.1rem', lineHeight: 1.5, flexShrink: 0 },
+  redFlagText: { fontFamily: 'var(--font-body)', fontSize: '0.875rem', fontWeight: 300, lineHeight: 1.6, color: 'var(--color-cream-muted)' },
 
   // Year variations (paid)
-  yearRow: { display: 'flex', gap: '16px', padding: '12px 0', borderBottom: '1px solid rgba(201, 168, 76, 0.08)', alignItems: 'flex-start' },
+  yearRow: { display: 'flex', gap: '16px', padding: '12px 0', borderBottom: '1px solid rgba(184, 148, 95, 0.08)', alignItems: 'flex-start' },
   yearLabel: { fontFamily: 'var(--font-body)', fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-gold)', minWidth: '72px', flexShrink: 0 },
-  yearDetail: { fontFamily: 'var(--font-body)', fontSize: '0.85rem', lineHeight: 1.55, color: 'var(--color-cream-muted)' },
+  yearDetail: { fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 300, lineHeight: 1.55, color: 'var(--color-cream-muted)' },
 
   // Detail cards (paid)
-  detailCard: { background: 'var(--color-surface)', border: '1px solid var(--color-border)', padding: '18px 20px', marginBottom: '12px' },
+  detailCard: { padding: '18px 20px', marginBottom: '12px', borderRadius: '12px', transition: 'all 0.4s ease' },
   cardHeader: { display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' },
   cardIconWrap: { fontSize: '1.1rem', width: '22px', textAlign: 'center', flexShrink: 0 },
   cardName: { fontFamily: 'var(--font-body)', fontSize: '0.95rem', fontWeight: 600, color: 'var(--color-cream)', flex: 1 },
-  answerBadge: { fontFamily: 'var(--font-body)', fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', padding: '3px 8px', border: '1px solid', whiteSpace: 'nowrap', flexShrink: 0 },
-  cardDesc: { fontFamily: 'var(--font-body)', fontSize: '0.85rem', lineHeight: 1.6, color: 'var(--color-cream-muted)', marginBottom: '10px', paddingLeft: '32px' },
-  cardMeta: { display: 'flex', gap: '16px', paddingLeft: '32px', fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: 'var(--color-cream-muted)', marginBottom: '10px' },
+  answerBadge: { fontFamily: 'var(--font-body)', fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', padding: '3px 8px', border: '1px solid', whiteSpace: 'nowrap', flexShrink: 0, borderRadius: '12px', transition: 'all 0.4s ease' },
+  cardDesc: { fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 300, lineHeight: 1.6, color: 'var(--color-cream-muted)', marginBottom: '10px', paddingLeft: '32px' },
+  cardMeta: { display: 'flex', gap: '16px', paddingLeft: '32px', fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 300, color: 'var(--color-cream-muted)', marginBottom: '10px' },
   categoryLabel: { textTransform: 'capitalize' },
   pointsLabel: { color: 'var(--color-gold)' },
-  whyBox: { fontFamily: 'var(--font-body)', fontSize: '0.8rem', lineHeight: 1.55, color: 'var(--color-cream-muted)', paddingLeft: '32px', borderLeft: '2px solid var(--color-gold)', marginLeft: '32px', paddingTop: '2px', paddingBottom: '2px', opacity: 0.8 },
+  whyBox: { fontFamily: 'var(--font-body)', fontSize: '0.8rem', fontWeight: 300, lineHeight: 1.55, color: 'var(--color-cream-muted)', paddingLeft: '32px', borderLeft: '2px solid var(--color-gold)', marginLeft: '32px', paddingTop: '2px', paddingBottom: '2px', opacity: 0.8 },
   whyLabel: { fontWeight: 600, color: 'var(--color-gold)' },
 
   // Resale value (paid)
-  resaleCard: { background: 'var(--color-surface)', border: '1px solid var(--color-gold)', padding: '24px', textAlign: 'center', marginBottom: '28px', display: 'flex', flexDirection: 'column', gap: '6px' },
+  resaleCard: { padding: '24px', textAlign: 'center', marginBottom: '28px', display: 'flex', flexDirection: 'column', gap: '6px', borderRadius: '12px' },
   resaleLabel: { fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 500, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--color-cream-muted)' },
   resaleValue: { fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: 700, color: 'var(--color-cream)' },
   resaleCondition: { fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-gold)', fontStyle: 'italic' },
 
   // Recommendation
-  recText: { fontFamily: 'var(--font-body)', fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-cream-muted)', marginBottom: '28px' },
+  recText: { fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, lineHeight: 1.65, color: 'var(--color-cream-muted)', marginBottom: '28px' },
 
   // PDF
-  pdfBtn: { fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-gold)', backgroundColor: 'transparent', border: '1px solid var(--color-gold)', padding: '14px 24px', cursor: 'pointer', letterSpacing: '0.05em', display: 'block', width: '100%', textAlign: 'center', marginBottom: '28px' },
+  pdfBtn: { fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-gold)', padding: '14px 24px', cursor: 'pointer', letterSpacing: '0.05em', display: 'block', width: '100%', textAlign: 'center', marginBottom: '28px' },
 
   // Disclaimer
   disclaimer: { borderTop: '1px solid var(--color-border)', paddingTop: '20px', marginBottom: '28px', fontFamily: 'var(--font-body)', fontSize: '0.75rem', lineHeight: 1.7, color: 'var(--color-cream-muted)', opacity: 0.6, textAlign: 'center' },
 
   // Actions
-  actionGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' },
-  actionBtn: { fontFamily: 'var(--font-body)', fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-cream)', backgroundColor: 'transparent', border: '1px solid var(--color-border)', padding: '14px 12px', cursor: 'pointer', letterSpacing: '0.03em', textAlign: 'center' },
-  actionBtnFull: { gridColumn: '1 / -1', borderColor: 'rgba(201, 168, 76, 0.3)', color: 'var(--color-gold)' },
+  actionGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' },
+  actionBtn: { fontFamily: 'var(--font-body)', fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-cream)', padding: '14px 12px', cursor: 'pointer', letterSpacing: '0.03em', textAlign: 'center' },
+  actionBtnFull: { gridColumn: '1 / -1', borderColor: 'rgba(184, 148, 95, 0.3)', color: 'var(--color-gold)' },
 
-  ctaBtn: { fontFamily: 'var(--font-body)', fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-bg)', backgroundColor: 'var(--color-gold)', border: 'none', padding: '14px 16px', cursor: 'pointer', letterSpacing: '0.03em' },
+  ctaBtn: { fontFamily: 'var(--font-body)', fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-cream)', padding: '14px 16px', cursor: 'pointer', letterSpacing: '0.03em' },
 };
 
 export default Results;
