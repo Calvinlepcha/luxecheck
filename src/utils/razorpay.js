@@ -22,12 +22,12 @@ const loadRazorpay = () => {
 };
 
 // ──────────────────────────────────────────────────────────────
-// IMPORTANT: Replace 'RAZORPAY_KEY_ID_HERE' with your actual
-// Razorpay Key ID from https://dashboard.razorpay.com/app/keys
-// This is the "Key Id" (starts with rzp_test_ or rzp_live_).
+// Set REACT_APP_RAZORPAY_KEY in your .env file (root of project):
+//   REACT_APP_RAZORPAY_KEY=rzp_live_xxxxx
+// For Netlify, add it in Site Settings → Environment Variables.
 // NEVER put your Key Secret in frontend code.
 // ──────────────────────────────────────────────────────────────
-const RAZORPAY_KEY = 'RAZORPAY_KEY_ID_HERE';
+const RAZORPAY_KEY = process.env.REACT_APP_RAZORPAY_KEY;
 
 // ──────────────────────────────────────────────────────────────
 // CURRENCY NOTE: Razorpay requires approval for international
