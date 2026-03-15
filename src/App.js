@@ -14,6 +14,7 @@ import TipArticle from './pages/TipArticle';
 import Community from './pages/Community';
 import CommunityPost from './pages/CommunityPost';
 import CreatePost from './pages/CreatePost';
+import PaymentSuccess from './pages/PaymentSuccess';
 import CustomCursor from './components/CustomCursor';
 import LoadingSplash from './components/LoadingSplash';
 import Chatbot from './components/Chatbot';
@@ -39,6 +40,7 @@ function App() {
           <Route path="/community/post" element={<CreatePost />} />
           <Route path="/community/:postId" element={<CommunityPost />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/collection" element={<Collection />} />
         </Routes>
       </div>

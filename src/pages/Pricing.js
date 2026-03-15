@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackgroundImage from '../components/BackgroundImage';
+import { buySingleReport, buySubscription } from '../utils/razorpay';
 
 const faqs = [
   {
@@ -22,32 +23,11 @@ function Pricing() {
   const [openFaq, setOpenFaq] = useState(null);
 
   const handleBuy = () => {
-    // ──────────────────────────────────────────────────────────
-    // TODO: Replace with Stripe Checkout integration
-    // Use Stripe.redirectToCheckout() or create a checkout session
-    // via your backend, then redirect the user.
-    // On success callback, set localStorage flag:
-    //   localStorage.setItem('luxecheck_paid', 'true');
-    // ──────────────────────────────────────────────────────────
-    try { localStorage.setItem('luxecheck_paid', 'true'); } catch {}
-    alert('Payment coming soon \u2014 enjoy free access during beta!');
-    navigate(-1);
+    buySingleReport();
   };
 
   const handleSubscribe = () => {
-    // ──────────────────────────────────────────────────────────
-    // TODO: Replace with Stripe Subscription Checkout
-    // Create a subscription checkout session via your backend.
-    // On success callback, set both localStorage flags:
-    //   localStorage.setItem('luxecheck_paid', 'true');
-    //   localStorage.setItem('luxecheck_subscribed', 'true');
-    // ──────────────────────────────────────────────────────────
-    try {
-      localStorage.setItem('luxecheck_paid', 'true');
-      localStorage.setItem('luxecheck_subscribed', 'true');
-    } catch {}
-    alert('Payment coming soon \u2014 enjoy free access during beta!');
-    navigate(-1);
+    buySubscription();
   };
 
   return (
@@ -113,6 +93,9 @@ function Pricing() {
       {/* Guarantee */}
       <p style={s.guarantee}>
         {'\u26E8'} 7-day money-back guarantee on all plans
+      </p>
+      <p style={s.razorpayNote}>
+        {'\uD83D\uDD12'} Secure payment powered by Razorpay
       </p>
 
       {/* FAQ */}
@@ -333,6 +316,16 @@ const s = {
     marginBottom: '60px',
     opacity: 0.7,
     lineHeight: 1.7,
+  },
+
+  razorpayNote: {
+    fontFamily: 'var(--font-body)',
+    fontSize: '0.72rem',
+    fontWeight: 300,
+    color: 'var(--color-cream-muted)',
+    textAlign: 'center',
+    marginBottom: '60px',
+    opacity: 0.5,
   },
 
   // FAQ

@@ -4,6 +4,7 @@ import BackgroundImage from '../components/BackgroundImage';
 import { LogoMark } from '../components/Logo';
 import { createChecklistChallenge, encodeChallenge } from '../utils/challengeCodec';
 import generatePremiumPDF from '../utils/pdfReport';
+import { buySingleReport } from '../utils/razorpay';
 
 function getVerdict(percentage) {
   if (percentage >= 80)
@@ -35,8 +36,10 @@ const answerIcons = {
 };
 
 function isPaid() {
-  try { return localStorage.getItem('luxecheck_paid') === 'true'; }
-  catch { return false; }
+  try {
+    return localStorage.getItem('luxecheck_paid_report') === 'true'
+      || localStorage.getItem('luxecheck_subscribed') === 'true';
+  } catch { return false; }
 }
 
 function isSubscribed() {
@@ -161,7 +164,7 @@ function Results() {
                 </div>
               ))}
             </div>
-            <button className="btn-luxe glass-btn-primary" style={s.upgradeBtn} onClick={() => navigate('/pricing')}>
+            <button className="btn-luxe glass-btn-primary" style={s.upgradeBtn} onClick={() => buySingleReport()}>
               Unlock Full Report &mdash; $6.99
             </button>
           </div>
