@@ -41,10 +41,7 @@ function Community() {
   const [typeFilter, setTypeFilter] = useState('all');
   const [catFilter, setCatFilter] = useState('all');
   const [sort, setSort] = useState('newest');
-  const [tick, setTick] = useState(0);
-
   const posts = useMemo(() => {
-    void tick; // refresh dependency
     let list = getPosts();
     if (typeFilter !== 'all') list = list.filter((p) => p.type === typeFilter);
     if (catFilter !== 'all') list = list.filter((p) => p.category === catFilter);
@@ -53,7 +50,7 @@ function Community() {
     else if (sort === 'discussed') list.sort((a, b) => b.replies.length - a.replies.length);
     else list.sort((a, b) => b.date - a.date);
     return list;
-  }, [typeFilter, catFilter, sort, tick]);
+  }, [typeFilter, catFilter, sort]);
 
   return (
     <div style={s.page}>

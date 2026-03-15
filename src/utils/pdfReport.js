@@ -45,10 +45,8 @@ export default async function generatePremiumPDF(bag, details, earned, max, perc
   const timeStr = reportDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
   let y = 0;
   let pageNum = 1;
-  let totalPages = 0; // set after first pass
 
   const passCount = details.filter(d => d.answer === 'pass').length;
-  const failCount = details.filter(d => d.answer === 'fail').length;
   const unsureCount = details.filter(d => d.answer === 'unsure').length;
 
   // Top 3 passed (by weight)
@@ -163,32 +161,6 @@ export default async function generatePremiumPDF(bag, details, earned, max, perc
     });
   }
 
-  function labelValue(label, value) {
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(BODY_SIZE);
-    doc.setTextColor(...GOLD);
-    doc.text(label, M, y);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(...TEXT_COLOR);
-    doc.text(value, M + doc.getTextWidth(label) + 3, y);
-    y += 6;
-  }
-
-  function bulletPoint(text, color) {
-    pageCheck(8);
-    doc.setFillColor(...(color || GOLD));
-    doc.circle(M + 2, y - 1.3, 1, 'F');
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(BODY_SIZE);
-    doc.setTextColor(...TEXT_COLOR);
-    const lines = doc.splitTextToSize(text, CW - 10);
-    lines.forEach((line, i) => {
-      doc.text(line, M + 7, y);
-      y += 5.5;
-    });
-    y += 1;
-  }
-
   function numberedItem(num, text) {
     pageCheck(8);
     doc.setFont('helvetica', 'bold');
@@ -261,10 +233,8 @@ export default async function generatePremiumPDF(bag, details, earned, max, perc
   // L
   doc.line(cx - 3.5, y - 4, cx - 3.5, y + 3);
   doc.line(cx - 3.5, y + 3, cx - 0.5, y + 3);
-  // C arc approximation
+  // C arc approximation (jsPDF doesn't support SVG path, draw as lines)
   doc.setDrawColor(...TEXT_COLOR);
-  const cPath = `M${cx + 3.5},${y - 3.5} C${cx + 1},${y - 5} ${cx - 0.5},${y - 3} ${cx - 0.5},${y} C${cx - 0.5},${y + 3} ${cx + 1},${y + 5} ${cx + 3.5},${y + 3}`;
-  // jsPDF doesn't support SVG path, draw C as lines
   doc.line(cx + 3.5, y - 3, cx + 1, y - 4.5);
   doc.line(cx + 1, y - 4.5, cx - 0.5, y - 2);
   doc.line(cx - 0.5, y - 2, cx - 0.5, y + 2);

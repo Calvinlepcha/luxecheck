@@ -231,7 +231,6 @@ export default function Challenge() {
   const flawCount = challenge.markers.filter((m) => m.isFlaw).length;
   const correctFlaws = challenge.markers.filter((m) => m.isFlaw && selected.has(m.name)).length;
   const falsePositives = challenge.markers.filter((m) => !m.isFlaw && selected.has(m.name)).length;
-  const score = correctFlaws - falsePositives;
   const isPerfect = correctFlaws === flawCount && falsePositives === 0;
 
   const handleSubmit = () => {

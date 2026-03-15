@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllTips, getFeaturedTips, CATEGORIES, searchTips, getTipsByCategory } from '../data/expertTips';
+import { getFeaturedTips, CATEGORIES, searchTips, getTipsByCategory } from '../data/expertTips';
 import BackgroundImage from '../components/BackgroundImage';
 
 const CATEGORY_COLORS = {
