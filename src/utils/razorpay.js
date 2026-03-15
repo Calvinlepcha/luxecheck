@@ -33,8 +33,8 @@ const RAZORPAY_KEY = process.env.REACT_APP_RAZORPAY_KEY;
 // CURRENCY NOTE: Razorpay requires approval for international
 // (non-INR) payments. If USD is not yet approved on your account,
 // temporarily change currency to 'INR' and use these amounts:
-//   - Single report: 59900  (₹599 in paise, ~$6.99)
-//   - Subscription:  33900  (₹339 in paise, ~$3.99)
+//   - Single report: 14900  (₹149 in paise)
+//   - Subscription:  33900  (₹339 in paise)
 // Once USD is approved, switch back to USD with the amounts below.
 // ──────────────────────────────────────────────────────────────
 
@@ -47,10 +47,10 @@ export const buySingleReport = async () => {
 
   const options = {
     key: RAZORPAY_KEY,
-    amount: 59900, // ₹599 in paise (~$6.99). Switch to 699 + 'USD' once international payments are approved.
+    amount: 14900, // ₹149 in paise
     currency: 'INR',
     name: 'LuxeCheck',
-    description: 'Single Authentication Report',
+    description: 'Authentication Report - ₹149',
     image: '/logo192.png',
     handler: function (response) {
       if (response.razorpay_payment_id) {
@@ -102,10 +102,10 @@ export const buySubscription = async () => {
 
   const options = {
     key: RAZORPAY_KEY,
-    amount: 33900, // ₹339 in paise (~$3.99). Switch to 399 + 'USD' once international payments are approved.
+    amount: 33900, // ₹339 in paise
     currency: 'INR',
     name: 'LuxeCheck',
-    description: 'Unlimited Monthly Subscription',
+    description: 'Unlimited Monthly Plan - ₹339/mo',
     image: '/logo192.png',
     handler: function (response) {
       if (response.razorpay_payment_id) {

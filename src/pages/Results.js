@@ -165,7 +165,7 @@ function Results() {
               ))}
             </div>
             <button className="btn-luxe glass-btn-primary" style={s.upgradeBtn} onClick={() => buySingleReport()}>
-              Unlock Full Report &mdash; &#8377;599
+              Unlock Full Report &mdash; &#8377;149
             </button>
           </div>
 

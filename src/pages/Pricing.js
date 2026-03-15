@@ -52,7 +52,7 @@ function Pricing() {
           <div style={s.cardInner}>
             <span style={s.tierLabel}>Single Report</span>
             <div style={s.priceRow}>
-              <span style={s.price}>&#8377;599</span>
+              <span style={s.price}>&#8377;149</span>
               <span style={s.priceSuffix}>one-time</span>
             </div>
             <p style={s.goodFor}>Good for: Verifying a luxury item before you buy</p>
