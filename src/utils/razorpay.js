@@ -63,6 +63,25 @@ export const buySingleReport = async () => {
     theme: {
       color: '#B8945F',
     },
+    config: {
+      display: {
+        blocks: {
+          banks: {
+            name: 'Pay using',
+            instruments: [
+              { method: 'upi' },
+              { method: 'card' },
+              { method: 'netbanking' },
+              { method: 'wallet' },
+            ],
+          },
+        },
+        sequence: ['block.banks'],
+        preferences: {
+          show_default_blocks: true,
+        },
+      },
+    },
     modal: {
       ondismiss: function () {
         console.log('Payment cancelled');
@@ -98,6 +117,25 @@ export const buySubscription = async () => {
     prefill: {},
     theme: {
       color: '#B8945F',
+    },
+    config: {
+      display: {
+        blocks: {
+          banks: {
+            name: 'Pay using',
+            instruments: [
+              { method: 'upi' },
+              { method: 'card' },
+              { method: 'netbanking' },
+              { method: 'wallet' },
+            ],
+          },
+        },
+        sequence: ['block.banks'],
+        preferences: {
+          show_default_blocks: true,
+        },
+      },
     },
     modal: {
       ondismiss: function () {
