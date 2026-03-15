@@ -9,20 +9,17 @@ import useScrollReveal from '../hooks/useScrollReveal';
 const isTouchDevice = () =>
   window.matchMedia('(hover: none)').matches;
 
+// Map brandIds to their product category for filtering
+const WATCH_BRANDS = new Set(['rolex', 'cartier', 'omega', 'patek-philippe', 'audemars-piguet', 'tag-heuer']);
+const SHOE_BRANDS = new Set(['christian-louboutin', 'jimmy-choo', 'nike', 'adidas-yeezy']);
+const getBrandCategory = (brandId) => {
+  if (WATCH_BRANDS.has(brandId)) return 'Watches';
+  if (SHOE_BRANDS.has(brandId)) return 'Shoes';
+  return 'Bags';
+};
+
 // ─── Coming Soon Brands (categories without full checklists yet) ──
 const COMING_SOON = [
-  // Watches
-  { name: 'Rolex', category: 'Watches' },
-  { name: 'Cartier', category: 'Watches' },
-  { name: 'Omega', category: 'Watches' },
-  { name: 'Patek Philippe', category: 'Watches' },
-  { name: 'Audemars Piguet', category: 'Watches' },
-  { name: 'Tag Heuer', category: 'Watches' },
-  // Shoes
-  { name: 'Christian Louboutin', category: 'Shoes' },
-  { name: 'Jimmy Choo', category: 'Shoes' },
-  { name: 'Nike', category: 'Shoes' },
-  { name: 'Adidas Yeezy', category: 'Shoes' },
   // Perfume
   { name: 'Tom Ford', category: 'Perfume' },
   { name: 'Creed', category: 'Perfume' },
@@ -416,7 +413,7 @@ function Scan() {
   // Filter brands by search and category
   const filteredFeaturedBrands = brands.filter((b) => {
     if (searchQuery && !b.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-    if (categoryFilter !== 'All' && categoryFilter !== 'Bags') return false;
+    if (categoryFilter !== 'All' && getBrandCategory(b.id) !== categoryFilter) return false;
     return true;
   });
 
