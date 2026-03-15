@@ -47,8 +47,8 @@ export const buySingleReport = async () => {
 
   const options = {
     key: RAZORPAY_KEY,
-    amount: 699, // $6.99 in cents (Razorpay uses smallest currency unit)
-    currency: 'USD',
+    amount: 59900, // ₹599 in paise (~$6.99). Switch to 699 + 'USD' once international payments are approved.
+    currency: 'INR',
     name: 'LuxeCheck',
     description: 'Single Authentication Report',
     image: '/logo192.png',
@@ -102,8 +102,8 @@ export const buySubscription = async () => {
 
   const options = {
     key: RAZORPAY_KEY,
-    amount: 399, // $3.99 in cents
-    currency: 'USD',
+    amount: 33900, // ₹339 in paise (~$3.99). Switch to 399 + 'USD' once international payments are approved.
+    currency: 'INR',
     name: 'LuxeCheck',
     description: 'Unlimited Monthly Subscription',
     image: '/logo192.png',

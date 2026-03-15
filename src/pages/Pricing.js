@@ -52,7 +52,7 @@ function Pricing() {
           <div style={s.cardInner}>
             <span style={s.tierLabel}>Single Report</span>
             <div style={s.priceRow}>
-              <span style={s.price}>$6.99</span>
+              <span style={s.price}>&#8377;599</span>
               <span style={s.priceSuffix}>one-time</span>
             </div>
             <p style={s.goodFor}>Good for: Verifying a luxury item before you buy</p>
@@ -73,7 +73,7 @@ function Pricing() {
           <div style={s.cardInner}>
             <span style={s.tierLabel}>Unlimited</span>
             <div style={s.priceRow}>
-              <span style={s.price}>$3.99</span>
+              <span style={s.price}>&#8377;339</span>
               <span style={s.priceSuffix}>/ month</span>
             </div>
             <p style={s.goodFor}>Good for: Resellers and collectors</p>
