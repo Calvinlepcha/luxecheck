@@ -144,6 +144,21 @@ export default function Chatbot() {
     }
   }, [open]);
 
+  // Listen for external open-chat events (e.g. from Scan page "Chat with Expert")
+  useEffect(() => {
+    const handler = (e) => {
+      setOpen(true);
+      if (e.detail?.message) {
+        // Small delay to let the chat initialize first
+        setTimeout(() => {
+          setInput(e.detail.message);
+        }, 400);
+      }
+    };
+    window.addEventListener('luxecheck-open-chat', handler);
+    return () => window.removeEventListener('luxecheck-open-chat', handler);
+  }, []);
+
   const addBotResponse = useCallback((text, chips, delay) => {
     setTyping(true);
     setTimeout(() => {
