@@ -9,21 +9,8 @@ import useScrollReveal from '../hooks/useScrollReveal';
 const isTouchDevice = () =>
   window.matchMedia('(hover: none)').matches;
 
-// ─── Coming Soon Brands ──────────────────────────────────────
+// ─── Coming Soon Brands (categories without full checklists yet) ──
 const COMING_SOON = [
-  // Bags
-  { name: 'Hermès', category: 'Bags' },
-  { name: 'Dior', category: 'Bags' },
-  { name: 'Prada', category: 'Bags' },
-  { name: 'Bottega Veneta', category: 'Bags' },
-  { name: 'Saint Laurent / YSL', category: 'Bags' },
-  { name: 'Celine', category: 'Bags' },
-  { name: 'Fendi', category: 'Bags' },
-  { name: 'Balenciaga', category: 'Bags' },
-  { name: 'Burberry', category: 'Bags' },
-  { name: 'Givenchy', category: 'Bags' },
-  { name: 'Valentino', category: 'Bags' },
-  { name: 'Loewe', category: 'Bags' },
   // Watches
   { name: 'Rolex', category: 'Watches' },
   { name: 'Cartier', category: 'Watches' },
