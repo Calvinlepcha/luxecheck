@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     q: 'What brands do you cover?',
-    a: 'Currently Louis Vuitton, Chanel, and Gucci with detailed checkpoint databases. Herm\u00e8s, Dior, and Prada are coming soon.',
+    a: 'We cover 30+ brands across bags, watches, shoes, perfumes, and jewelry — including Louis Vuitton, Chanel, Gucci, Hermès, Rolex, Cartier, Tom Ford, Creed, Tiffany & Co, and many more.',
   },
 ];
 

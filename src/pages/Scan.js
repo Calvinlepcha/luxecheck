@@ -12,26 +12,15 @@ const isTouchDevice = () =>
 // Map brandIds to their product category for filtering
 const WATCH_BRANDS = new Set(['rolex', 'cartier', 'omega', 'patek-philippe', 'audemars-piguet', 'tag-heuer']);
 const SHOE_BRANDS = new Set(['christian-louboutin', 'jimmy-choo', 'nike', 'adidas-yeezy']);
+const PERFUME_BRANDS = new Set(['tom-ford', 'creed', 'maison-francis-kurkdjian', 'le-labo', 'byredo']);
+const JEWELRY_BRANDS = new Set(['tiffany-co', 'van-cleef-arpels', 'bvlgari', 'chopard']);
 const getBrandCategory = (brandId) => {
   if (WATCH_BRANDS.has(brandId)) return 'Watches';
   if (SHOE_BRANDS.has(brandId)) return 'Shoes';
+  if (PERFUME_BRANDS.has(brandId)) return 'Perfume';
+  if (JEWELRY_BRANDS.has(brandId)) return 'Jewelry';
   return 'Bags';
 };
-
-// ─── Coming Soon Brands (categories without full checklists yet) ──
-const COMING_SOON = [
-  // Perfume
-  { name: 'Tom Ford', category: 'Perfume' },
-  { name: 'Creed', category: 'Perfume' },
-  { name: 'Maison Francis Kurkdjian', category: 'Perfume' },
-  { name: 'Le Labo', category: 'Perfume' },
-  { name: 'Byredo', category: 'Perfume' },
-  // Jewelry
-  { name: 'Tiffany & Co', category: 'Jewelry' },
-  { name: 'Van Cleef & Arpels', category: 'Jewelry' },
-  { name: 'Bvlgari', category: 'Jewelry' },
-  { name: 'Chopard', category: 'Jewelry' },
-];
 
 const CATEGORY_TABS = ['All', 'Bags', 'Watches', 'Shoes', 'Perfume', 'Jewelry'];
 
@@ -263,132 +252,7 @@ const styles = {
     transition: 'all 0.4s ease',
   },
 
-  // Coming soon card (smaller)
-  comingSoonGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '12px',
-    marginTop: '16px',
-    overflow: 'hidden',
-    transition: 'max-height 0.5s ease, opacity 0.4s ease',
-  },
-  comingSoonCard: {
-    cursor: 'pointer',
-    padding: '20px 16px',
-    textAlign: 'center',
-    position: 'relative',
-    borderRadius: '12px',
-    transition: 'all 0.4s ease',
-  },
-  comingSoonName: {
-    fontFamily: 'var(--font-heading)',
-    fontSize: '1rem',
-    fontWeight: 500,
-    color: 'var(--color-cream)',
-    marginBottom: '4px',
-    letterSpacing: '0.05em',
-  },
-  comingSoonCategory: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.65rem',
-    fontWeight: 300,
-    letterSpacing: '0.12em',
-    textTransform: 'uppercase',
-    color: 'var(--color-cream-muted)',
-    opacity: 0.6,
-  },
-  comingSoonBadge: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.55rem',
-    fontWeight: 600,
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase',
-    color: 'var(--color-gold)',
-    opacity: 0.5,
-    marginTop: '8px',
-    display: 'block',
-  },
 
-  // Coming soon modal overlay
-  overlay: {
-    position: 'fixed',
-    inset: 0,
-    background: 'rgba(0,0,0,0.7)',
-    backdropFilter: 'blur(8px)',
-    WebkitBackdropFilter: 'blur(8px)',
-    zIndex: 1000,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '24px',
-  },
-  modal: {
-    maxWidth: '380px',
-    width: '100%',
-    padding: '36px 28px',
-    borderRadius: '12px',
-    textAlign: 'center',
-  },
-  modalBrand: {
-    fontFamily: 'var(--font-heading)',
-    fontSize: '1.5rem',
-    fontWeight: 600,
-    color: 'var(--color-cream)',
-    marginBottom: '8px',
-    letterSpacing: '0.08em',
-  },
-  modalText: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.88rem',
-    fontWeight: 300,
-    lineHeight: 1.7,
-    color: 'var(--color-cream-muted)',
-    marginBottom: '24px',
-  },
-  modalBtnGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '10px',
-  },
-  modalPrimaryBtn: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.85rem',
-    fontWeight: 700,
-    letterSpacing: '0.08em',
-    textTransform: 'uppercase',
-    color: 'var(--color-cream)',
-    padding: '14px 24px',
-    cursor: 'pointer',
-    width: '100%',
-  },
-  modalSecondaryBtn: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.8rem',
-    fontWeight: 600,
-    color: 'var(--color-gold)',
-    padding: '12px 24px',
-    cursor: 'pointer',
-    width: '100%',
-  },
-  modalNotified: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.75rem',
-    fontWeight: 300,
-    color: 'var(--color-gold)',
-    opacity: 0.8,
-    marginTop: '4px',
-  },
-  modalClose: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.8rem',
-    fontWeight: 300,
-    color: 'var(--color-cream-muted)',
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    marginTop: '12px',
-    opacity: 0.5,
-  },
 };
 
 function Scan() {
@@ -401,8 +265,7 @@ function Scan() {
     try { return sessionStorage.getItem('luxecheck_brands_expanded') === 'true'; }
     catch { return false; }
   });
-  const [comingSoonModal, setComingSoonModal] = useState(null);
-  const [notified, setNotified] = useState(false);
+
   const touchRef = useRef(isTouchDevice());
 
   const allModels = selectedBrand ? getBrandModels(selectedBrand.id) : [];
@@ -417,11 +280,6 @@ function Scan() {
     return true;
   });
 
-  const filteredComingSoon = COMING_SOON.filter((b) => {
-    if (searchQuery && !b.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-    if (categoryFilter !== 'All' && b.category !== categoryFilter) return false;
-    return true;
-  });
 
   useEffect(() => {
     try { sessionStorage.setItem('luxecheck_brands_expanded', expanded ? 'true' : 'false'); }
@@ -453,24 +311,6 @@ function Scan() {
     card.style.borderColor = 'var(--color-border)';
   };
 
-  const handleNotify = (brandName) => {
-    try {
-      const existing = JSON.parse(localStorage.getItem('luxecheck_notify_brands') || '[]');
-      if (!existing.includes(brandName)) {
-        existing.push(brandName);
-        localStorage.setItem('luxecheck_notify_brands', JSON.stringify(existing));
-      }
-    } catch {}
-    setNotified(true);
-  };
-
-  const handleChatWithExpert = (brandName) => {
-    setComingSoonModal(null);
-    // Dispatch custom event to open chatbot with pre-filled message
-    window.dispatchEvent(new CustomEvent('luxecheck-open-chat', {
-      detail: { message: `Tell me about authenticating ${brandName} products` },
-    }));
-  };
 
   return (
     <div style={styles.page}>
@@ -479,40 +319,6 @@ function Scan() {
         <ImageModal src={modalImage.src} alt={modalImage.alt} onClose={() => setModalImage(null)} />
       )}
 
-      {/* Coming Soon Modal */}
-      {comingSoonModal && (
-        <div style={styles.overlay} onClick={() => { setComingSoonModal(null); setNotified(false); }}>
-          <div className="glass-card" style={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div style={styles.modalBrand}>{comingSoonModal.name}</div>
-            <p style={styles.modalText}>
-              {comingSoonModal.name} authentication checklist coming soon!
-              In the meantime, ask our AI Expert chatbot for authentication tips on {comingSoonModal.name}.
-            </p>
-            <div style={styles.modalBtnGroup}>
-              <button
-                className="btn-luxe glass-btn-primary"
-                style={styles.modalPrimaryBtn}
-                onClick={() => handleChatWithExpert(comingSoonModal.name)}
-              >
-                Chat with Expert
-              </button>
-              <button
-                className="btn-luxe glass-btn-secondary"
-                style={styles.modalSecondaryBtn}
-                onClick={() => handleNotify(comingSoonModal.name)}
-              >
-                {notified ? '\u2713 Saved' : 'Notify Me'}
-              </button>
-              {notified && (
-                <span style={styles.modalNotified}>We'll let you know when it's ready</span>
-              )}
-            </div>
-            <button style={styles.modalClose} onClick={() => { setComingSoonModal(null); setNotified(false); }}>
-              Close
-            </button>
-          </div>
-        </div>
-      )}
 
       {selectedBrand ? (
         <>
@@ -592,7 +398,7 @@ function Scan() {
       ) : (
         <>
           <h1 style={styles.heading}>Select Brand</h1>
-          <div style={styles.brandCount}>30+ luxury brands covered</div>
+          <div style={styles.brandCount}>34 luxury brands covered</div>
 
           <div style={styles.searchWrapper}>
             <input
@@ -680,40 +486,10 @@ function Scan() {
               style={styles.expandBtn}
               onClick={() => setExpanded(!expanded)}
             >
-              {expanded ? 'Show Less' : 'Explore All 30+ Brands'}
+              {expanded ? 'Show Less' : 'Explore All 34 Brands'}
             </button>
           ) : null}
 
-          {/* Coming soon brands grid */}
-          {(expanded || categoryFilter !== 'All' || searchQuery) && filteredComingSoon.length > 0 && (
-            <>
-              {!searchQuery && categoryFilter === 'All' && (
-                <div style={{ ...styles.sectionLabel, marginTop: '28px' }}>More brands</div>
-              )}
-              {(searchQuery || categoryFilter !== 'All') && filteredFeaturedBrands.length === 0 && filteredComingSoon.length > 0 && (
-                <div style={{ ...styles.sectionLabel, marginTop: '8px' }}>Coming soon</div>
-              )}
-              <div style={styles.comingSoonGrid}>
-                {filteredComingSoon.map((brand) => (
-                  <div
-                    key={brand.name}
-                    className="glass-card"
-                    style={styles.comingSoonCard}
-                    onClick={() => { setComingSoonModal(brand); setNotified(false); }}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') { setComingSoonModal(brand); setNotified(false); }
-                    }}
-                  >
-                    <div style={styles.comingSoonName}>{brand.name}</div>
-                    <div style={styles.comingSoonCategory}>{brand.category}</div>
-                    <span style={styles.comingSoonBadge}>Coming Soon</span>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
         </>
       )}
     </div>
